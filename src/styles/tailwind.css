@@ -4,13 +4,85 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+/* ─────────────────────────────────────────
+   DESIGN TOKENS — DARK (default)
+───────────────────────────────────────── */
+:root,
+[data-theme='dark'] {
   --font-cormorant: 'Cormorant Garamond', Georgia, serif;
   --font-inter: 'Inter', system-ui, sans-serif;
+
+  /* Backgrounds */
+  --bg-primary:    #0A0A0A;
+  --bg-secondary:  #111111;
+  --bg-tertiary:   #1A1A1A;
+  --bg-elevated:   #222222;
+
+  /* Text */
+  --text-primary:  #E8E8E8;
+  --text-secondary:#9A9A9A;
+  --text-muted:    #666666;
+  --text-inverse:  #0A0A0A;
+
+  /* Borders */
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-medium: rgba(255, 255, 255, 0.15);
+
+  /* Gold accent — same in both themes */
+  --gold:          #C9A84C;
+  --gold-light:    #E2C47A;
+  --gold-dark:     #A07830;
+
+  /* Shadows */
+  --shadow-gold:   0 0 30px rgba(201, 168, 76, 0.15);
+  --shadow-gold-strong: 0 0 60px rgba(201, 168, 76, 0.25);
+  --shadow-card:   0 8px 40px rgba(0, 0, 0, 0.4);
+
+  /* Scrollbar */
+  --scrollbar-track: #0A0A0A;
+  --scrollbar-thumb: #C9A84C;
 }
 
+/* ─────────────────────────────────────────
+   DESIGN TOKENS — LIGHT
+───────────────────────────────────────── */
+[data-theme='light'] {
+  /* Backgrounds */
+  --bg-primary:    #FAFAF8;
+  --bg-secondary:  #F2F0EB;
+  --bg-tertiary:   #E8E4DC;
+  --bg-elevated:   #FFFFFF;
+
+  /* Text */
+  --text-primary:  #1A1A1A;
+  --text-secondary:#4A4A4A;
+  --text-muted:    #888888;
+  --text-inverse:  #FAFAF8;
+
+  /* Borders */
+  --border-subtle: rgba(0, 0, 0, 0.08);
+  --border-medium: rgba(0, 0, 0, 0.15);
+
+  /* Gold — slightly richer in light mode */
+  --gold:          #B8922A;
+  --gold-light:    #C9A84C;
+  --gold-dark:     #8B6914;
+
+  /* Shadows */
+  --shadow-gold:   0 0 30px rgba(184, 146, 42, 0.2);
+  --shadow-gold-strong: 0 0 60px rgba(184, 146, 42, 0.3);
+  --shadow-card:   0 8px 40px rgba(0, 0, 0, 0.08);
+
+  /* Scrollbar */
+  --scrollbar-track: #F2F0EB;
+  --scrollbar-thumb: #B8922A;
+}
+
+/* ─────────────────────────────────────────
+   BASE STYLES
+───────────────────────────────────────── */
 @layer base {
-  * {
+  *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -20,48 +92,46 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Smooth theme transition — applied AFTER initial paint to prevent flash */
+    &.theme-ready {
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
   }
 
   body {
-    background-color: #0A0A0A;
-    color: #E8E8E8;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
     font-family: var(--font-inter);
     overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   ::selection {
-    background-color: rgba(201, 168, 76, 0.3);
-    color: #E2C47A;
+    background-color: rgba(201, 168, 76, 0.25);
+    color: var(--gold-light);
   }
 
-  ::-webkit-scrollbar {
-    width: 4px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: #0A0A0A;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: #C9A84C;
-    border-radius: 2px;
-  }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+  ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 2px; }
 }
 
+/* ─────────────────────────────────────────
+   COMPONENT CLASSES — all use tokens
+───────────────────────────────────────── */
 @layer components {
-  .font-display {
-    font-family: var(--font-cormorant);
-  }
+  .font-display { font-family: var(--font-cormorant); }
 
+  /* Gold gradient text — adapts to theme */
   .gold-text {
-    background: linear-gradient(135deg, #C9A84C 0%, #E2C47A 50%, #C9A84C 100%);
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .shimmer-text {
-    background: linear-gradient(90deg, #C9A84C 0%, #E2C47A 25%, #F5F0E8 50%, #E2C47A 75%, #C9A84C 100%);
+    background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 25%, #F5F0E8 50%, var(--gold-light) 75%, var(--gold) 100%);
     background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -69,56 +139,91 @@
     animation: shimmer 3s linear infinite;
   }
 
+  /* Buttons */
   .btn-gold {
-    @apply inline-flex items-center gap-2 px-8 py-4 bg-gold text-obsidian font-body font-semibold text-sm tracking-widest uppercase transition-all duration-300;
+    @apply inline-flex items-center gap-2 px-8 py-4 font-body font-semibold text-sm tracking-widest uppercase transition-all duration-300;
+    background: var(--gold);
+    color: var(--text-inverse);
   }
-
   .btn-gold:hover {
-    @apply bg-gold-light shadow-gold-strong;
+    background: var(--gold-light);
+    box-shadow: var(--shadow-gold-strong);
     transform: translateY(-1px);
   }
 
   .btn-outline {
-    @apply inline-flex items-center gap-2 px-8 py-4 border border-gold text-gold font-body font-semibold text-sm tracking-widest uppercase transition-all duration-300;
+    @apply inline-flex items-center gap-2 px-8 py-4 font-body font-semibold text-sm tracking-widest uppercase transition-all duration-300;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    background: transparent;
   }
-
   .btn-outline:hover {
-    @apply bg-gold text-obsidian;
+    background: var(--gold);
+    color: var(--text-inverse);
   }
 
+  /* Labels */
   .section-label {
-    @apply text-gold font-body text-xs tracking-ultra-wide uppercase font-medium;
+    @apply font-body text-xs tracking-ultra-wide uppercase font-medium;
+    color: var(--gold);
   }
 
+  /* Cards */
   .luxury-card {
-    @apply bg-graphite border border-white-subtle rounded-none transition-all duration-500;
+    @apply rounded-none transition-all duration-500;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-subtle);
   }
-
   .luxury-card:hover {
-    @apply border-gold-medium shadow-gold;
+    border-color: rgba(201, 168, 76, 0.4);
+    box-shadow: var(--shadow-gold);
   }
 
+  /* Divider */
   .divider-gold {
-    @apply w-12 h-px bg-gold mx-auto my-6;
+    @apply w-12 h-px mx-auto my-6;
+    background: var(--gold);
   }
 
+  /* Nav links */
   .nav-link {
-    @apply text-platinum-muted hover:text-platinum font-body text-sm tracking-widest uppercase transition-colors duration-300;
+    @apply font-body text-sm tracking-widest uppercase transition-colors duration-300;
+    color: var(--text-secondary);
   }
+  .nav-link:hover { color: var(--text-primary); }
 
+  /* Inputs */
   .input-luxury {
-    @apply w-full bg-graphite border border-white-subtle px-5 py-4 text-platinum placeholder-platinum-dark font-body text-sm focus:outline-none focus:border-gold transition-colors duration-300;
+    @apply w-full px-5 py-4 font-body text-sm focus:outline-none transition-colors duration-300;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
   }
+  .input-luxury::placeholder { color: var(--text-muted); }
+  .input-luxury:focus { border-color: var(--gold); }
+
+  /* Section backgrounds using tokens */
+  .bg-theme-primary   { background: var(--bg-primary); }
+  .bg-theme-secondary { background: var(--bg-secondary); }
+  .bg-theme-tertiary  { background: var(--bg-tertiary); }
+  .bg-theme-elevated  { background: var(--bg-elevated); }
+
+  /* Text using tokens */
+  .text-theme-primary   { color: var(--text-primary); }
+  .text-theme-secondary { color: var(--text-secondary); }
+  .text-theme-muted     { color: var(--text-muted); }
+
+  /* Border using tokens */
+  .border-theme-subtle { border-color: var(--border-subtle); }
+  .border-theme-medium { border-color: var(--border-medium); }
 }
 
+/* ─────────────────────────────────────────
+   UTILITIES
+───────────────────────────────────────── */
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-
-  .fill-gold {
-    fill: #C9A84C;
-  }
+  .text-balance { text-wrap: balance; }
+  .fill-gold { fill: var(--gold); }
 
   .animate-delay-100 { animation-delay: 100ms; }
   .animate-delay-200 { animation-delay: 200ms; }
@@ -126,4 +231,12 @@
   .animate-delay-400 { animation-delay: 400ms; }
   .animate-delay-500 { animation-delay: 500ms; }
   .animate-delay-600 { animation-delay: 600ms; }
+}
+
+/* ─────────────────────────────────────────
+   KEYFRAMES
+───────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
 }

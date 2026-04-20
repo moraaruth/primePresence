@@ -25,9 +25,8 @@ const footerLinks = {
 
 export default function Footer() {
   return (
-    <footer className="bg-charcoal border-t border-white-subtle">
-      {/* Top CTA Band */}
-      <div className="border-b border-white-subtle">
+    <footer style={{ background: 'var(--bg-secondary)', borderTop: '1px solid var(--border-subtle)' }}>
+      <div style={{ borderBottom: '1px solid var(--border-subtle)' }}>
         <div className="max-w-7xl mx-auto px-6 lg:px-12 py-16 flex flex-col lg:flex-row items-center justify-between gap-8">
           <div>
             <p className="section-label mb-3">Ready to Elevate?</p>
@@ -96,7 +95,7 @@ export default function Footer() {
         </div>
 
         {/* Contact Info */}
-        <div className="mt-12 pt-8 border-t border-white-subtle flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+        <div className="mt-12 pt-8 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6" style={{ borderTop: '1px solid var(--border-subtle)' }}>
           <div className="flex flex-col sm:flex-row gap-6">
             {[
               { icon: MapPin, text: 'Nairobi, Kenya · Global' },

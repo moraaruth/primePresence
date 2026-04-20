@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
+import ThemeToggle from './ThemeToggle';
 
 const navLinks = [
   { label: 'Platform', href: '/platform' },
@@ -25,14 +26,20 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? 'bg-obsidian/95 backdrop-blur-md border-b border-white-subtle' : 'bg-transparent'
-      }`}
+      className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
+      style={{
+        background: scrolled ? 'color-mix(in srgb, var(--bg-primary) 95%, transparent)' : 'transparent',
+        backdropFilter: scrolled ? 'blur(12px)' : 'none',
+        borderBottom: scrolled ? '1px solid var(--border-subtle)' : '1px solid transparent',
+      }}
     >
       <nav className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between h-20">
         {/* Logo */}
         <Link href="/" className="flex flex-col leading-none group">
-          <span className="font-display text-2xl font-light tracking-widest text-platinum group-hover:text-gold transition-colors duration-300">
+          <span
+            className="font-display text-2xl font-light tracking-widest transition-colors duration-300"
+            style={{ color: 'var(--text-primary)' }}
+          >
             PRIME
           </span>
           <span className="font-display text-2xl font-light tracking-widest gold-text">
@@ -44,44 +51,42 @@ export default function Navbar() {
         <ul className="hidden lg:flex items-center gap-10">
           {navLinks.map((link) => (
             <li key={link.href}>
-              <Link href={link.href} className="nav-link">
-                {link.label}
-              </Link>
+              <Link href={link.href} className="nav-link">{link.label}</Link>
             </li>
           ))}
         </ul>
 
-        {/* CTA */}
+        {/* CTA + Theme Toggle */}
         <div className="hidden lg:flex items-center gap-3">
-          <Link href="/contact" className="nav-link">
-            Contact
-          </Link>
-          <Link href="/contact" className="btn-gold text-xs py-3 px-6">
-            Get Started
-          </Link>
+          <Link href="/contact" className="nav-link">Contact</Link>
+          <ThemeToggle />
+          <Link href="/contact" className="btn-gold text-xs py-3 px-6">Get Started</Link>
         </div>
 
-        {/* Mobile Toggle */}
-        <button
-          className="lg:hidden text-platinum hover:text-gold transition-colors"
-          onClick={() => setOpen(!open)}
-          aria-label="Toggle menu"
-        >
-          {open ? <X size={22} /> : <Menu size={22} />}
-        </button>
+        {/* Mobile controls */}
+        <div className="lg:hidden flex items-center gap-3">
+          <ThemeToggle />
+          <button
+            style={{ color: 'var(--text-primary)' }}
+            className="hover:text-gold transition-colors"
+            onClick={() => setOpen(!open)}
+            aria-label="Toggle menu"
+          >
+            {open ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
       </nav>
 
       {/* Mobile Menu */}
       {open && (
-        <div className="lg:hidden bg-charcoal border-t border-white-subtle">
+        <div
+          className="lg:hidden"
+          style={{ background: 'var(--bg-secondary)', borderTop: '1px solid var(--border-subtle)' }}
+        >
           <ul className="flex flex-col px-6 py-8 gap-6">
             {navLinks.map((link) => (
               <li key={link.href}>
-                <Link
-                  href={link.href}
-                  className="nav-link text-base"
-                  onClick={() => setOpen(false)}
-                >
+                <Link href={link.href} className="nav-link text-base" onClick={() => setOpen(false)}>
                   {link.label}
                 </Link>
               </li>
