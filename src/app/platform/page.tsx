@@ -88,8 +88,8 @@ const plans = [
   {
     name: 'Starter',
     tagline: 'For businesses launching their presence',
-    priceKES: '38,000',
-    setupNote: 'One-time setup fee',
+    priceKES: '45,000',
+    setupNote: 'One-time project fee',
     highlight: false,
     features: [
       { text: '5-page luxury website', included: true },
@@ -108,8 +108,8 @@ const plans = [
   {
     name: 'Growth',
     tagline: 'For businesses scaling their brand',
-    priceKES: '90,000',
-    setupNote: 'One-time setup fee',
+    priceKES: '95,000',
+    setupNote: 'One-time project fee',
     highlight: true,
     badge: 'Most Popular',
     features: [
@@ -129,8 +129,8 @@ const plans = [
   {
     name: 'Elite',
     tagline: 'For premium brands demanding the best',
-    priceKES: '195,000',
-    setupNote: 'One-time setup fee',
+    priceKES: '185,000',
+    setupNote: 'One-time project fee',
     highlight: false,
     features: [
       { text: 'Unlimited pages', included: true },

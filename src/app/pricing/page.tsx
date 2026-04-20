@@ -8,8 +8,8 @@ const plans = [
   {
     name: 'Starter',
     tagline: 'For businesses launching their digital presence',
-    priceKES: '38,000',
-    setupKES: '65,000',
+    priceKES: '15,000',
+    setupKES: '45,000',
     billing: '/month',
     highlight: false,
     features: [
@@ -31,8 +31,8 @@ const plans = [
   {
     name: 'Growth',
     tagline: 'For serious businesses scaling their brand',
-    priceKES: '90,000',
-    setupKES: '130,000',
+    priceKES: '35,000',
+    setupKES: '95,000',
     billing: '/month',
     highlight: true,
     badge: 'Most Popular',
@@ -55,8 +55,8 @@ const plans = [
   {
     name: 'Elite',
     tagline: 'For established businesses demanding the best',
-    priceKES: '195,000',
-    setupKES: '325,000',
+    priceKES: '75,000',
+    setupKES: '185,000',
     billing: '/month',
     highlight: false,
     features: [

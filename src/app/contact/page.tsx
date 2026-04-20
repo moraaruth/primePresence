@@ -194,10 +194,10 @@ export default function ContactPage() {
                       <label className="section-label block mb-2">Monthly Budget</label>
                       <select name="budget" className="input-luxury appearance-none cursor-pointer">
                         <option value="">Select budget range</option>
-                        <option value="Starter — KSh 3,800–10,200/month">Starter — KSh 3,800–10,200/month</option>
-                        <option value="Pro — KSh 10,200–25,800/month">Pro — KSh 10,200–25,800/month</option>
-                        <option value="Elite — KSh 25,800+/month">Elite — KSh 25,800+/month</option>
-                        <option value="Done-For-You Agency — KSh 90,000+/month">Done-For-You Agency — KSh 90,000+/month</option>
+                        <option value="Starter — KSh 45,000 (one-time)">Starter — KSh 45,000 (one-time)</option>
+                        <option value="Growth — KSh 95,000 (one-time)">Growth — KSh 95,000 (one-time)</option>
+                        <option value="Elite — KSh 185,000 (one-time)">Elite — KSh 185,000 (one-time)</option>
+                        <option value="Monthly Retainer — from KSh 15,000/mo">Monthly Retainer — from KSh 15,000/mo</option>
                         <option value="Custom / Enterprise">Custom / Enterprise</option>
                       </select>
                     </div>

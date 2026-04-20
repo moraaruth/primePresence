@@ -111,9 +111,9 @@ const testimonials = [
 ];
 
 const pricingHighlights = [
-              { plan: 'Starter', price: 'KSh 3,800', period: '/mo', desc: 'Website + basic SEO', cta: 'Enquire Now', href: '/contact', highlight: false },
-  { plan: 'Pro', price: 'KSh 10,200', period: '/mo', desc: 'Full digital presence + AI tools', cta: 'Enquire Now', href: '/contact', highlight: true, badge: 'Most Popular' },
-  { plan: 'Elite', price: 'KSh 90,000', period: '/mo', desc: 'Full done-for-you management', cta: 'Enquire Now', href: '/contact', highlight: false },
+  { plan: 'Starter', price: 'KSh 45,000', period: '', desc: 'Website + SEO — one-time build', cta: 'Enquire Now', href: '/contact', highlight: false },
+  { plan: 'Growth', price: 'KSh 95,000', period: '', desc: 'Full brand + website — one-time build', cta: 'Enquire Now', href: '/contact', highlight: true, badge: 'Most Popular' },
+  { plan: 'Elite', price: 'KSh 185,000', period: '', desc: 'Complete digital ecosystem — one-time build', cta: 'Enquire Now', href: '/contact', highlight: false },
 ];
 
 export default function HomePage() {
@@ -210,8 +210,8 @@ export default function HomePage() {
               </h2>
               <div className="divider-gold" />
               <p className="text-platinum-muted max-w-xl mx-auto text-sm leading-relaxed">
-                Our team designs, builds, and manages your complete digital presence —
-                from KSh 3,800/month.
+                Our team designs, builds, and manages your complete digital presence.
+                One-time project fees from KSh 45,000.
               </p>
             </div>
 
