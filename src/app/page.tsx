@@ -200,18 +200,111 @@ export default function HomePage() {
           </div>
         </SectionWrapper>
 
+        {/* ── CHOOSE YOUR PATH ── */}
+        <SectionWrapper className="py-28 px-6 lg:px-12 bg-charcoal">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <p className="section-label mb-4">Two Ways To Build</p>
+              <h2 className="font-display text-5xl lg:text-6xl font-light text-platinum mb-4">
+                Your <span className="gold-text italic">Perfect</span> Path
+              </h2>
+              <p className="text-platinum-muted max-w-xl mx-auto text-sm leading-relaxed">
+                Whether you want to build it yourself or let us handle everything, Prime Presence has you covered.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8 mb-12">
+              {/* DIY Path */}
+              <div className="border border-white-subtle p-12 bg-gradient-to-br from-gold/5 to-transparent rounded group hover:border-gold/40 transition-all duration-300">
+                <div className="mb-8">
+                  <div className="w-16 h-16 bg-gold/20 rounded flex items-center justify-center mb-6 group-hover:bg-gold/30 transition-colors">
+                    <Cpu className="text-gold" size={32} />
+                  </div>
+                  <h3 className="font-display text-3xl font-light text-platinum mb-2">Build It Yourself</h3>
+                  <p className="text-platinum-muted text-sm">Professional website in 60 seconds. No code. No design skills needed.</p>
+                </div>
+
+                <ul className="space-y-3 mb-8">
+                  <li className="flex items-start gap-3 text-sm">
+                    <CheckCircle size={16} className="text-gold mt-0.5 shrink-0" />
+                    <span className="text-platinum-muted">AI generates your entire site</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm">
+                    <CheckCircle size={16} className="text-gold mt-0.5 shrink-0" />
+                    <span className="text-platinum-muted">Easy drag-and-drop editor</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm">
+                    <CheckCircle size={16} className="text-gold mt-0.5 shrink-0" />
+                    <span className="text-platinum-muted">Publish instantly to your subdomain</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm">
+                    <CheckCircle size={16} className="text-gold mt-0.5 shrink-0" />
+                    <span className="text-platinum-muted">Free tier + affordable plans</span>
+                  </li>
+                </ul>
+
+                <Link href="/signup" className="btn-gold w-full justify-center">
+                  Start Free <ArrowRight size={14} />
+                </Link>
+
+                <p className="text-platinum-dark text-xs text-center mt-4">No credit card required • 14-day free trial</p>
+              </div>
+
+              {/* Agency Path */}
+              <div className="border-2 border-gold p-12 bg-gradient-to-br from-gold/10 to-transparent rounded group hover:border-gold/60 transition-all duration-300">
+                <div className="mb-8">
+                  <div className="w-16 h-16 bg-gold/30 rounded flex items-center justify-center mb-6 group-hover:bg-gold/40 transition-colors">
+                    <Globe className="text-gold" size={32} />
+                  </div>
+                  <h3 className="font-display text-3xl font-light text-platinum mb-2">Let Us Build It</h3>
+                  <p className="text-platinum-muted text-sm">Premium done-for-you service. Our team handles everything from strategy to launch.</p>
+                </div>
+
+                <ul className="space-y-3 mb-8">
+                  <li className="flex items-start gap-3 text-sm">
+                    <CheckCircle size={16} className="text-gold mt-0.5 shrink-0" />
+                    <span className="text-platinum-muted">Luxury custom design</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm">
+                    <CheckCircle size={16} className="text-gold mt-0.5 shrink-0" />
+                    <span className="text-platinum-muted">Professional copy & branding</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm">
+                    <CheckCircle size={16} className="text-gold mt-0.5 shrink-0" />
+                    <span className="text-platinum-muted">SEO optimization & lead capture</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm">
+                    <CheckCircle size={16} className="text-gold mt-0.5 shrink-0" />
+                    <span className="text-platinum-muted">Ongoing support included</span>
+                  </li>
+                </ul>
+
+                <Link href="/contact" className="btn-outline w-full justify-center">
+                  Schedule Consultation <ArrowRight size={14} />
+                </Link>
+
+                <p className="text-platinum-dark text-xs text-center mt-4">From KSh 45,000 • Live in 7–14 days</p>
+              </div>
+            </div>
+
+            <div className="text-center">
+              <p className="text-platinum-muted text-sm">Both paths include world-class design and results-focused strategy.</p>
+            </div>
+          </div>
+        </SectionWrapper>
+
         {/* ── PLATFORM TEASER ── */}
         <SectionWrapper className="py-28 px-6 lg:px-12">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
-              <p className="section-label mb-4">The Platform</p>
+              <p className="section-label mb-4">DIY Builder</p>
               <h2 className="font-display text-5xl lg:text-6xl font-light text-platinum">
-              We Build It. <span className="gold-text italic">Beautifully.</span>
+              Build Your Site <span className="gold-text italic">Beautifully.</span>
               </h2>
               <div className="divider-gold" />
               <p className="text-platinum-muted max-w-xl mx-auto text-sm leading-relaxed">
-                Our team designs, builds, and manages your complete digital presence.
-                One-time project fees from KSh 45,000.
+                Our AI-powered builder combines luxury design with simplicity.
+                No technical skills required.
               </p>
             </div>
 
@@ -275,9 +368,9 @@ export default function HomePage() {
         <SectionWrapper className="py-28 px-6 lg:px-12 bg-charcoal" id="services">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
-              <p className="section-label mb-4">Done-For-You</p>
+              <p className="section-label mb-4">Done-For-You Service</p>
               <h2 className="font-display text-5xl lg:text-6xl font-light text-platinum">
-                We Build It <span className="gold-text italic">For You.</span>
+                We Handle <span className="gold-text italic">Everything.</span>
               </h2>
               <div className="divider-gold" />
               <p className="text-platinum-muted max-w-xl mx-auto text-sm leading-relaxed">

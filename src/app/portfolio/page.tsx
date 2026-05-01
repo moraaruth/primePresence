@@ -63,6 +63,25 @@ const featuredProjects = [
     palette: ['#1C1917', '#C4622D', '#D97B4A', '#FAF7F2', '#F5E6DC'],
     stack: 'Next.js · Tailwind v4 · Formspree',
   },
+  {
+    client: 'Bloom',
+    industry: 'Autism Support Platform',
+    location: 'Kenya & East Africa',
+    url: 'http://localhost:4032',
+    img: 'https://images.unsplash.com/photo-1559757175-5700dde675bc?w=1200&q=80',
+    tagline: 'You don’t need to figure this out alone.',
+    brief: 'Families and autistic individuals in Kenya had no centralised, accessible, and culturally relevant platform for autism support, resources, and therapy discovery.',
+    solution: 'We built Bloom — a calm, fully accessible support platform with a resource library, practical tools, therapy directory, and contact system. Designed with neurodiversity principles, WCAG accessibility, and dark/light mode throughout.',
+    results: [
+      { metric: '4', label: 'Full resource articles' },
+      { metric: '8+', label: 'Practical tools & guides' },
+      { metric: '6', label: 'Therapy listings' },
+      { metric: 'WCAG', label: 'AA Accessibility' },
+    ],
+    deliverables: ['Brand Identity', 'Accessible Website', 'Resource Library', 'Therapy Directory', 'Practical Tools', 'Dark/Light Mode'],
+    palette: ['#0F1A1C', '#4ECDC4', '#7FB069', '#9B8EC4', '#E8F4F0'],
+    stack: 'Next.js · Tailwind v4 · Formspree',
+  },
 ];
 
 const projects = [
