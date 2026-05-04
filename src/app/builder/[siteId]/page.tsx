@@ -30,6 +30,11 @@ export default function BuilderPage() {
   
   const supabase = createClient();
 
+  // Store siteId so the supabase shim can use it for section queries
+  useEffect(() => {
+    if (siteId) sessionStorage.setItem('currentSiteId', siteId);
+  }, [siteId]);
+
   // Load site and pages
   useEffect(() => {
     loadBuilder();
