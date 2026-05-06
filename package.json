@@ -5,10 +5,7 @@
   "scripts": {
     "dev": "next dev -p 4028",
     "build": "next build",
-    "pages:build": "npx @cloudflare/next-on-pages",
-    "deploy": "npm run pages:build && wrangler pages deploy",
     "start": "next start -p 4028",
-    "serve": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "format": "prettier --write ."
@@ -27,7 +24,6 @@
     "resend": "^6.12.0"
   },
   "devDependencies": {
-    "@cloudflare/next-on-pages": "^1.13.16",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
