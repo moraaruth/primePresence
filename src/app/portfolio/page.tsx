@@ -7,7 +7,25 @@ import { ArrowRight, TrendingUp, ExternalLink, CheckCircle } from 'lucide-react'
 
 const featuredProjects = [
   {
-    client: 'Obsidian Estates',
+    client: 'Bliss Tours & Travels',
+    industry: 'Luxury Travel & Safaris',
+    location: 'Nairobi, Kenya',
+    url: 'http://localhost:3000',
+    img: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1200&q=80',
+    tagline: 'Discover Africa\'s Hidden Wonders.',
+    brief: 'Bliss Tours needed a full-stack travel platform to compete with international booking giants. They had no digital presence, no booking system, and no way to showcase Kenya\'s finest safari and hotel experiences to high-value travelers.',
+    solution: 'We built a complete luxury travel platform — hotel aggregation engine with 35+ curated properties, real-time filtering, M-Pesa STK Push payments, vendor onboarding portal, admin dashboard with revenue analytics, and a dual light/dark mode UI.',
+    results: [
+      { metric: '35+', label: 'Hotels & lodges live' },
+      { metric: '4', label: 'Regions covered' },
+      { metric: 'M-Pesa', label: 'Instant payments' },
+      { metric: '21 days', label: 'From brief to launch' },
+    ],
+    deliverables: ['Full-Stack Platform', 'Hotel Aggregation', 'M-Pesa Payments', 'Admin Dashboard', 'Vendor Portal', 'Light/Dark Mode'],
+    palette: ['#000000', '#0D0D0D', '#D4AF37', '#E8C84A', '#FAFAFA'],
+    stack: 'Next.js 15 · Node.js · MongoDB · M-Pesa API',
+  },
+  {
     industry: 'Luxury Real Estate',
     location: 'Karen, Nairobi',
     url: 'https://obsidian-estates.pages.dev',

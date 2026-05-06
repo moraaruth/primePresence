@@ -63,7 +63,7 @@ export default function PublishedSitePage() {
 
       // Get the requested page or home
       const pageSlug = slug === 'home' || slug === '' ? 'home' : slug;
-      const page = pagesData?.find((p) => p.slug === pageSlug) || pagesData?.[0];
+      const page = pagesData?.find((p: Page) => p.slug === pageSlug) || pagesData?.[0];
 
       if (!page) {
         throw new Error('Page not found');
