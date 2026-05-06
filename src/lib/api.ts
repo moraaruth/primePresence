@@ -1,59 +1,81 @@
 // ─────────────────────────────────────────────────────────────────────────────
-//  API CLIENT — replaces Supabase entirely
-//  All requests go to our Express + MongoDB backend
+//  API CLIENT
+//  • All requests go directly to Express + MongoDB backend
+//  • JWT stored in localStorage, sent as Authorization: Bearer <token>
+//  • Never calls Supabase, Firebase, or any Next.js proxy route
 // ─────────────────────────────────────────────────────────────────────────────
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/v1';
+const BASE = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/v1').replace(/\/$/, '');
 
-// ── Token helpers (localStorage) ─────────────────────────────────────────────
-const getToken = (): string | null => {
-  if (typeof window === 'undefined') return null;
-  return localStorage.getItem('accessToken');
+// ── Normalize MongoDB _id → id (recursively) ─────────────────────────────────
+function normalizeIds(obj: any): void {
+  if (!obj || typeof obj !== 'object') return;
+  if (Array.isArray(obj)) { obj.forEach(normalizeIds); return; }
+  if (obj._id !== undefined) obj.id = String(obj._id);
+  Object.values(obj).forEach(normalizeIds);
+}
+
+// ── Token helpers ─────────────────────────────────────────────────────────────
+export const token = {
+  get: (): string | null =>
+    typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null,
+  set: (t: string) => localStorage.setItem('accessToken', t),
+  clear: () => localStorage.removeItem('accessToken'),
 };
 
-const setToken = (token: string) => localStorage.setItem('accessToken', token);
-const clearToken = () => localStorage.removeItem('accessToken');
-
-// ── Core fetch wrapper ────────────────────────────────────────────────────────
-async function apiFetch<T = any>(
+// ── Core fetch ────────────────────────────────────────────────────────────────
+async function request<T = any>(
   path: string,
   options: RequestInit = {}
 ): Promise<{ data: T | null; error: string | null }> {
-  const token = getToken();
+  if (!path) return { data: null, error: 'No path provided' };
 
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     ...(options.headers as Record<string, string>),
   };
 
-  if (token) headers['Authorization'] = `Bearer ${token}`;
+  const t = token.get();
+  if (t) headers['Authorization'] = `Bearer ${t}`;
 
   try {
-    let res = await fetch(`${BASE_URL}${path}`, { ...options, headers, credentials: 'include' });
+    let res = await fetch(`${BASE}${path}`, { ...options, headers });
 
     // Auto-refresh on 401
     if (res.status === 401 && path !== '/auth/login' && path !== '/auth/refresh') {
-      const refreshRes = await fetch(`${BASE_URL}/auth/refresh`, {
+      const refreshRes = await fetch(`${BASE}/auth/refresh`, {
         method: 'POST',
         credentials: 'include',
       });
       if (refreshRes.ok) {
-        const refreshData = await refreshRes.json();
-        setToken(refreshData.data.accessToken);
-        headers['Authorization'] = `Bearer ${refreshData.data.accessToken}`;
-        res = await fetch(`${BASE_URL}${path}`, { ...options, headers, credentials: 'include' });
+        const refreshJson = await refreshRes.json();
+        const newToken = refreshJson?.data?.accessToken;
+        if (newToken) {
+          token.set(newToken);
+          headers['Authorization'] = `Bearer ${newToken}`;
+          res = await fetch(`${BASE}${path}`, { ...options, headers });
+        }
       } else {
-        clearToken();
+        token.clear();
         if (typeof window !== 'undefined') window.location.href = '/login';
-        return { data: null, error: 'Session expired' };
+        return { data: null, error: 'Session expired. Please log in again.' };
       }
     }
 
     const json = await res.json();
-    if (!res.ok) return { data: null, error: json.message || 'Request failed' };
-    return { data: json.data ?? json, error: null };
+    normalizeIds(json);
+
+    if (!res.ok) {
+      const msg = json?.message || `Request failed with status ${res.status}`;
+      console.error(`[API] ${options.method || 'GET'} ${path} → ${res.status}: ${msg}`);
+      return { data: null, error: msg };
+    }
+
+    return { data: (json?.data ?? json) as T, error: null };
   } catch (err: any) {
-    return { data: null, error: err.message || 'Network error' };
+    const msg = err?.message || 'Network error — is the backend running?';
+    console.error(`[API] ${path} threw:`, msg);
+    return { data: null, error: msg };
   }
 }
 
@@ -61,85 +83,110 @@ async function apiFetch<T = any>(
 //  AUTH
 // ─────────────────────────────────────────────────────────────────────────────
 export const auth = {
-  signUp: async (email: string, password: string, fullName: string) => {
-    const [firstName, ...rest] = fullName.trim().split(' ');
-    const { data, error } = await apiFetch('/auth/register', {
+  register: async (firstName: string, lastName: string, email: string, password: string) => {
+    const { data, error } = await request('/auth/register', {
       method: 'POST',
-      body: JSON.stringify({ firstName, lastName: rest.join(' '), email, password }),
+      body: JSON.stringify({ firstName, lastName, email, password }),
     });
-    if (data?.accessToken) setToken(data.accessToken);
+    if (data?.accessToken) token.set(data.accessToken);
     return { data, error };
   },
 
-  signIn: async (email: string, password: string) => {
-    const { data, error } = await apiFetch('/auth/login', {
+  login: async (email: string, password: string) => {
+    const { data, error } = await request('/auth/login', {
       method: 'POST',
       body: JSON.stringify({ email, password }),
     });
-    if (data?.accessToken) setToken(data.accessToken);
+    if (data?.accessToken) token.set(data.accessToken);
     return { data, error };
   },
 
-  signOut: async () => {
-    await apiFetch('/auth/logout', { method: 'POST' });
-    clearToken();
+  logout: async () => {
+    await request('/auth/logout', { method: 'POST' });
+    token.clear();
   },
 
-  getUser: async () => {
-    if (!getToken()) return { data: { user: null }, error: null };
-    return apiFetch('/auth/me');
-  },
-
-  // Google OAuth — redirect to backend OAuth endpoint
-  signInWithGoogle: () => {
-    window.location.href = `${BASE_URL}/auth/google`;
-  },
+  me: async () => request('/auth/me'),
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
 //  SITES
 // ─────────────────────────────────────────────────────────────────────────────
 export const sites = {
-  list: () => apiFetch('/sites'),
+  list: () => request('/sites'),
 
-  get: (id: string) => apiFetch(`/sites/${id}`),
+  get: (id: string) => {
+    if (!id || id === 'undefined') {
+      console.error('[API] sites.get called with invalid id:', id);
+      return Promise.resolve({ data: null, error: 'Invalid site ID' });
+    }
+    return request(`/sites/${id}`);
+  },
 
-  generate: (data: object) =>
-    apiFetch('/sites/generate', { method: 'POST', body: JSON.stringify(data) }),
+  generate: (payload: object) =>
+    request('/sites/generate', { method: 'POST', body: JSON.stringify(payload) }),
 
   update: (id: string, updates: object) =>
-    apiFetch(`/sites/${id}`, { method: 'PATCH', body: JSON.stringify(updates) }),
+    request(`/sites/${id}`, { method: 'PATCH', body: JSON.stringify(updates) }),
 
-  delete: (id: string) => apiFetch(`/sites/${id}`, { method: 'DELETE' }),
+  delete: (id: string) => request(`/sites/${id}`, { method: 'DELETE' }),
 
-  publish: (id: string) => apiFetch(`/sites/${id}/publish`, { method: 'POST' }),
+  publish: (id: string) => {
+    if (!id || id === 'undefined') {
+      console.error('[API] sites.publish called with invalid id:', id);
+      return Promise.resolve({ data: null, error: 'Invalid site ID' });
+    }
+    return request(`/sites/${id}/publish`, { method: 'POST' });
+  },
 
-  getPublished: (subdomain: string) => apiFetch(`/sites/published/${subdomain}`),
+  getPublished: (subdomain: string) => request(`/sites/published/${subdomain}`),
+
+  getPreview: (id: string) => {
+    if (!id || id === 'undefined') {
+      console.error('[API] sites.getPreview called with invalid id:', id);
+      return Promise.resolve({ data: null, error: 'Invalid site ID' });
+    }
+    return request(`/sites/preview/${id}`);
+  },
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
 //  PAGES
 // ─────────────────────────────────────────────────────────────────────────────
 export const pages = {
-  list: (siteId: string) => apiFetch(`/sites/${siteId}/pages`),
+  list: (siteId: string) => {
+    if (!siteId || siteId === 'undefined') {
+      console.error('[API] pages.list called with invalid siteId:', siteId);
+      return Promise.resolve({ data: null, error: 'Invalid site ID' });
+    }
+    return request(`/sites/${siteId}/pages`);
+  },
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
 //  SECTIONS
 // ─────────────────────────────────────────────────────────────────────────────
 export const sections = {
-  list: (siteId: string, pageId: string) =>
-    apiFetch(`/sites/${siteId}/pages/${pageId}/sections`),
+  list: (siteId: string, pageId: string) => {
+    if (!siteId || !pageId) {
+      console.error('[API] sections.list called with invalid ids:', { siteId, pageId });
+      return Promise.resolve({ data: null, error: 'Invalid site or page ID' });
+    }
+    return request(`/sites/${siteId}/pages/${pageId}/sections`);
+  },
 
   update: (id: string, content: object) =>
-    apiFetch(`/sites/sections/${id}`, { method: 'PATCH', body: JSON.stringify({ content }) }),
-
-  delete: (id: string) => apiFetch(`/sites/sections/${id}`, { method: 'DELETE' }),
-
-  reorder: (sectionUpdates: { id: string; order: number }[]) =>
-    apiFetch('/sites/sections/reorder', {
+    request(`/sites/sections/${id}`, {
       method: 'PATCH',
-      body: JSON.stringify({ sections: sectionUpdates }),
+      body: JSON.stringify({ content }),
+    }),
+
+  delete: (id: string) => request(`/sites/sections/${id}`, { method: 'DELETE' }),
+
+  reorder: (updates: { id: string; order: number }[]) =>
+    request('/sites/sections/reorder', {
+      method: 'PATCH',
+      body: JSON.stringify({ sections: updates }),
     }),
 };
 
@@ -147,13 +194,5 @@ export const sections = {
 //  SUBSCRIPTION
 // ─────────────────────────────────────────────────────────────────────────────
 export const subscription = {
-  get: () => apiFetch('/sites/subscription/me'),
-};
-
-// ─────────────────────────────────────────────────────────────────────────────
-//  LEADS (contact form)
-// ─────────────────────────────────────────────────────────────────────────────
-export const leads = {
-  submit: (data: object) =>
-    apiFetch('/leads', { method: 'POST', body: JSON.stringify(data) }),
+  get: () => request('/sites/subscription/me'),
 };

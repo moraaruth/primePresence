@@ -1,27 +1,30 @@
 export type SiteStatus = 'draft' | 'published';
 export type PlanType = 'free' | 'starter' | 'pro' | 'elite';
 
-export type Site = {
+export interface Site {
   id: string;
-  user_id: string;
+  _id?: string;
+  userId: string;
   name: string;
   subdomain: string;
   industry: string;
   style: string;
+  colorPreference: string;
   status: SiteStatus;
-  published_at: string | null;
-  created_at: string;
-  pages?: Page[];
-};
+  publishedAt: string | null;
+  createdAt: string;
+  // alias kept for dashboard compatibility
+  created_at?: string;
+}
 
-export type Page = {
+export interface Page {
   id: string;
-  site_id: string;
+  _id?: string;
+  siteId: string;
   slug: string;
   title: string;
   order: number;
-  sections?: Section[];
-};
+}
 
 export type SectionType =
   | 'hero'
@@ -32,23 +35,35 @@ export type SectionType =
   | 'contact'
   | 'footer';
 
-export type Section = {
+export interface Section {
   id: string;
-  page_id: string;
+  _id?: string;
+  pageId: string;
   type: SectionType;
   order: number;
-  content: Record<string, unknown>;
-};
+  content: Record<string, any>;
+}
 
-export type Subscription = {
+export interface Subscription {
   id: string;
-  user_id: string;
+  userId: string;
   plan: PlanType;
   status: 'active' | 'cancelled' | 'trialing';
-  current_period_end: string | null;
-};
+  currentPeriodEnd: string | null;
+}
 
-export type OnboardingData = {
+export interface AuthUser {
+  id: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  email: string;
+  role: string;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface OnboardingData {
   businessName: string;
   industry: string;
   style: string;
@@ -56,4 +71,4 @@ export type OnboardingData = {
   audience: string;
   goal: string;
   colorPreference: string;
-};
+}

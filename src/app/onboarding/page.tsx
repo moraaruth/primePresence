@@ -2,23 +2,34 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowRight, ArrowLeft, Loader, Check } from 'lucide-react';
+import { sites as sitesApi } from '@/lib/api';
+import { ArrowRight, ArrowLeft, Loader, Check, AlertCircle } from 'lucide-react';
 import type { OnboardingData } from '@/lib/types';
 
-const INDUSTRIES = ['Real Estate', 'Consulting', 'Healthcare / Wellness', 'Restaurant / Hospitality', 'Law / Legal Services', 'Coaching / Training', 'Retail / E-commerce', 'Creative / Portfolio', 'Tech / Startup', 'Other'];
+const INDUSTRIES = [
+  'Real Estate', 'Consulting', 'Healthcare / Wellness', 'Restaurant / Hospitality',
+  'Law / Legal Services', 'Coaching / Training', 'Retail / E-commerce',
+  'Creative / Portfolio', 'Tech / Startup', 'Other',
+];
 const STYLES = [
-  { id: 'luxury', label: 'Luxury', desc: 'Dark, gold accents, premium feel' },
+  { id: 'luxury',  label: 'Luxury',  desc: 'Dark, gold accents, premium feel' },
   { id: 'minimal', label: 'Minimal', desc: 'Clean, white space, understated' },
-  { id: 'bold', label: 'Bold', desc: 'Strong colours, high contrast' },
-  { id: 'warm', label: 'Warm', desc: 'Earthy tones, approachable' },
+  { id: 'bold',    label: 'Bold',    desc: 'Strong colours, high contrast' },
+  { id: 'warm',    label: 'Warm',    desc: 'Earthy tones, approachable' },
 ];
 const PAGES = ['Home', 'About', 'Services', 'Portfolio', 'Blog', 'Contact', 'Pricing', 'Testimonials'];
-const GOALS = ['Generate leads / enquiries', 'Showcase my work / portfolio', 'Sell products online', 'Build my personal brand', 'Provide information / resources'];
+const GOALS = [
+  'Generate leads / enquiries',
+  'Showcase my work / portfolio',
+  'Sell products online',
+  'Build my personal brand',
+  'Provide information / resources',
+];
 const COLORS = [
-  { id: 'dark-gold', label: 'Dark & Gold', bg: '#0A0A0A', accent: '#C9A84C' },
-  { id: 'white-navy', label: 'White & Navy', bg: '#FFFFFF', accent: '#1A2B3C' },
-  { id: 'cream-sage', label: 'Cream & Sage', bg: '#FAF7F2', accent: '#5A8A4A' },
-  { id: 'dark-teal', label: 'Dark & Teal', bg: '#0F1A1C', accent: '#4ECDC4' },
+  { id: 'dark-gold',        label: 'Dark & Gold',        bg: '#0A0A0A', accent: '#C9A84C' },
+  { id: 'white-navy',       label: 'White & Navy',       bg: '#FFFFFF', accent: '#1A2B3C' },
+  { id: 'cream-sage',       label: 'Cream & Sage',       bg: '#FAF7F2', accent: '#5A8A4A' },
+  { id: 'dark-teal',        label: 'Dark & Teal',        bg: '#0F1A1C', accent: '#4ECDC4' },
   { id: 'white-terracotta', label: 'White & Terracotta', bg: '#FAFAF8', accent: '#C4622D' },
 ];
 
@@ -28,6 +39,7 @@ export default function OnboardingPage() {
   const router = useRouter();
   const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const [data, setData] = useState<OnboardingData>({
     businessName: '',
     industry: '',
@@ -49,17 +61,18 @@ export default function OnboardingPage() {
 
   async function handleGenerate() {
     setLoading(true);
-    try {
-      const res = await fetch('/api/generate-site', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-      const { siteId } = await res.json();
-      router.push(`/builder/${siteId}`);
-    } catch {
+    setError('');
+
+    const { data: result, error: err } = await sitesApi.generate(data);
+
+    if (err || !result?.siteId) {
+      setError(err || 'Generation failed — no site ID returned. Please try again.');
       setLoading(false);
+      return;
     }
+
+    console.log('[Onboarding] Site generated, siteId:', result.siteId);
+    router.push(`/builder/${result.siteId}`);
   }
 
   const canNext = () => {
@@ -85,7 +98,7 @@ export default function OnboardingPage() {
         </div>
       </div>
 
-      {/* Progress bar */}
+      {/* Progress */}
       <div className="h-1 bg-white-subtle">
         <div className="h-full bg-gold transition-all duration-500" style={{ width: `${progress}%` }} />
       </div>
@@ -94,17 +107,26 @@ export default function OnboardingPage() {
       <div className="flex-1 flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-xl">
 
+          {error && (
+            <div className="mb-6 px-4 py-3 border border-red-500/30 bg-red-500/5 text-red-400 text-sm flex items-start gap-3">
+              <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />
+              {error}
+            </div>
+          )}
+
           {/* Step 0 — Business Name */}
           {step === 0 && (
-            <div className="animate-fade-up">
+            <div>
               <p className="section-label mb-3">Step 1 of 7</p>
-              <h1 className="font-display text-4xl font-light text-platinum mb-3">What's your business called?</h1>
+              <h1 className="font-display text-4xl font-light text-platinum mb-3">What&apos;s your business called?</h1>
               <p className="text-platinum-muted text-sm mb-8">This will be used throughout your website.</p>
               <input
-                type="text" placeholder="e.g. Kova Advisory, Bahari Retreats..."
+                type="text"
+                placeholder="e.g. Kova Advisory, Bahari Retreats..."
                 value={data.businessName}
                 onChange={e => setData(d => ({ ...d, businessName: e.target.value }))}
-                className="input-luxury text-lg py-5" autoFocus
+                className="input-luxury text-lg py-5"
+                autoFocus
                 onKeyDown={e => e.key === 'Enter' && canNext() && setStep(1)}
               />
             </div>
@@ -112,14 +134,21 @@ export default function OnboardingPage() {
 
           {/* Step 1 — Industry */}
           {step === 1 && (
-            <div className="animate-fade-up">
+            <div>
               <p className="section-label mb-3">Step 2 of 7</p>
               <h1 className="font-display text-4xl font-light text-platinum mb-3">What industry are you in?</h1>
-              <p className="text-platinum-muted text-sm mb-8">We'll tailor your website content to your field.</p>
+              <p className="text-platinum-muted text-sm mb-8">We&apos;ll tailor your website content to your field.</p>
               <div className="grid grid-cols-2 gap-3">
                 {INDUSTRIES.map(ind => (
-                  <button key={ind} onClick={() => setData(d => ({ ...d, industry: ind }))}
-                    className={`px-4 py-3 text-sm text-left border transition-all duration-200 ${data.industry === ind ? 'border-gold bg-gold/10 text-gold' : 'border-white-subtle text-platinum-muted hover:border-gold/40'}`}>
+                  <button
+                    key={ind}
+                    onClick={() => setData(d => ({ ...d, industry: ind }))}
+                    className={`px-4 py-3 text-sm text-left border transition-all duration-200 ${
+                      data.industry === ind
+                        ? 'border-gold bg-gold/10 text-gold'
+                        : 'border-white-subtle text-platinum-muted hover:border-gold/40'
+                    }`}
+                  >
                     {ind}
                   </button>
                 ))}
@@ -129,14 +158,19 @@ export default function OnboardingPage() {
 
           {/* Step 2 — Style */}
           {step === 2 && (
-            <div className="animate-fade-up">
+            <div>
               <p className="section-label mb-3">Step 3 of 7</p>
               <h1 className="font-display text-4xl font-light text-platinum mb-3">Choose your website style</h1>
               <p className="text-platinum-muted text-sm mb-8">Pick the aesthetic that best represents your brand.</p>
               <div className="grid grid-cols-2 gap-4">
                 {STYLES.map(s => (
-                  <button key={s.id} onClick={() => setData(d => ({ ...d, style: s.id }))}
-                    className={`p-5 text-left border transition-all duration-200 ${data.style === s.id ? 'border-gold bg-gold/10' : 'border-white-subtle hover:border-gold/40'}`}>
+                  <button
+                    key={s.id}
+                    onClick={() => setData(d => ({ ...d, style: s.id }))}
+                    className={`p-5 text-left border transition-all duration-200 ${
+                      data.style === s.id ? 'border-gold bg-gold/10' : 'border-white-subtle hover:border-gold/40'
+                    }`}
+                  >
                     <p className={`font-display text-xl font-light mb-1 ${data.style === s.id ? 'text-gold' : 'text-platinum'}`}>{s.label}</p>
                     <p className="text-platinum-muted text-xs">{s.desc}</p>
                   </button>
@@ -147,14 +181,21 @@ export default function OnboardingPage() {
 
           {/* Step 3 — Pages */}
           {step === 3 && (
-            <div className="animate-fade-up">
+            <div>
               <p className="section-label mb-3">Step 4 of 7</p>
               <h1 className="font-display text-4xl font-light text-platinum mb-3">Which pages do you need?</h1>
               <p className="text-platinum-muted text-sm mb-8">Select all that apply. You can add more later.</p>
               <div className="grid grid-cols-2 gap-3">
                 {PAGES.map(page => (
-                  <button key={page} onClick={() => togglePage(page)}
-                    className={`px-4 py-3 text-sm text-left border transition-all duration-200 flex items-center justify-between ${data.pages.includes(page) ? 'border-gold bg-gold/10 text-gold' : 'border-white-subtle text-platinum-muted hover:border-gold/40'}`}>
+                  <button
+                    key={page}
+                    onClick={() => togglePage(page)}
+                    className={`px-4 py-3 text-sm text-left border transition-all duration-200 flex items-center justify-between ${
+                      data.pages.includes(page)
+                        ? 'border-gold bg-gold/10 text-gold'
+                        : 'border-white-subtle text-platinum-muted hover:border-gold/40'
+                    }`}
+                  >
                     {page}
                     {data.pages.includes(page) && <Check size={14} />}
                   </button>
@@ -165,7 +206,7 @@ export default function OnboardingPage() {
 
           {/* Step 4 — Audience */}
           {step === 4 && (
-            <div className="animate-fade-up">
+            <div>
               <p className="section-label mb-3">Step 5 of 7</p>
               <h1 className="font-display text-4xl font-light text-platinum mb-3">Who are your ideal clients?</h1>
               <p className="text-platinum-muted text-sm mb-8">Describe them briefly — the AI will write copy that speaks directly to them.</p>
@@ -173,21 +214,30 @@ export default function OnboardingPage() {
                 placeholder="e.g. High-net-worth individuals in Nairobi looking for premium consulting services..."
                 value={data.audience}
                 onChange={e => setData(d => ({ ...d, audience: e.target.value }))}
-                className="input-luxury resize-none" rows={4} autoFocus
+                className="input-luxury resize-none"
+                rows={4}
+                autoFocus
               />
             </div>
           )}
 
           {/* Step 5 — Goal */}
           {step === 5 && (
-            <div className="animate-fade-up">
+            <div>
               <p className="section-label mb-3">Step 6 of 7</p>
-              <h1 className="font-display text-4xl font-light text-platinum mb-3">What's your primary goal?</h1>
-              <p className="text-platinum-muted text-sm mb-8">This shapes your website's calls-to-action and structure.</p>
+              <h1 className="font-display text-4xl font-light text-platinum mb-3">What&apos;s your primary goal?</h1>
+              <p className="text-platinum-muted text-sm mb-8">This shapes your website&apos;s calls-to-action and structure.</p>
               <div className="flex flex-col gap-3">
                 {GOALS.map(goal => (
-                  <button key={goal} onClick={() => setData(d => ({ ...d, goal }))}
-                    className={`px-5 py-4 text-sm text-left border transition-all duration-200 ${data.goal === goal ? 'border-gold bg-gold/10 text-gold' : 'border-white-subtle text-platinum-muted hover:border-gold/40'}`}>
+                  <button
+                    key={goal}
+                    onClick={() => setData(d => ({ ...d, goal }))}
+                    className={`px-5 py-4 text-sm text-left border transition-all duration-200 ${
+                      data.goal === goal
+                        ? 'border-gold bg-gold/10 text-gold'
+                        : 'border-white-subtle text-platinum-muted hover:border-gold/40'
+                    }`}
+                  >
                     {goal}
                   </button>
                 ))}
@@ -197,14 +247,19 @@ export default function OnboardingPage() {
 
           {/* Step 6 — Colours */}
           {step === 6 && (
-            <div className="animate-fade-up">
+            <div>
               <p className="section-label mb-3">Step 7 of 7</p>
               <h1 className="font-display text-4xl font-light text-platinum mb-3">Choose your colour palette</h1>
               <p className="text-platinum-muted text-sm mb-8">Pick the palette that feels right for your brand.</p>
               <div className="flex flex-col gap-3">
                 {COLORS.map(c => (
-                  <button key={c.id} onClick={() => setData(d => ({ ...d, colorPreference: c.id }))}
-                    className={`px-5 py-4 text-sm text-left border transition-all duration-200 flex items-center gap-4 ${data.colorPreference === c.id ? 'border-gold' : 'border-white-subtle hover:border-gold/40'}`}>
+                  <button
+                    key={c.id}
+                    onClick={() => setData(d => ({ ...d, colorPreference: c.id }))}
+                    className={`px-5 py-4 text-sm text-left border transition-all duration-200 flex items-center gap-4 ${
+                      data.colorPreference === c.id ? 'border-gold' : 'border-white-subtle hover:border-gold/40'
+                    }`}
+                  >
                     <div className="flex gap-2 shrink-0">
                       <div className="w-6 h-6 rounded-full border border-white-subtle" style={{ background: c.bg }} />
                       <div className="w-6 h-6 rounded-full" style={{ background: c.accent }} />
@@ -219,20 +274,32 @@ export default function OnboardingPage() {
 
           {/* Navigation */}
           <div className="flex items-center justify-between mt-10">
-            <button onClick={() => setStep(s => s - 1)} disabled={step === 0}
-              className="btn-outline py-3 px-6 disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-2">
+            <button
+              onClick={() => setStep(s => s - 1)}
+              disabled={step === 0}
+              className="btn-outline py-3 px-6 disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-2"
+            >
               <ArrowLeft size={16} /> Back
             </button>
 
             {step < STEPS.length - 1 ? (
-              <button onClick={() => setStep(s => s + 1)} disabled={!canNext()}
-                className="btn-gold py-3 px-8 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2">
+              <button
+                onClick={() => setStep(s => s + 1)}
+                disabled={!canNext()}
+                className="btn-gold py-3 px-8 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2"
+              >
                 Continue <ArrowRight size={16} />
               </button>
             ) : (
-              <button onClick={handleGenerate} disabled={loading}
-                className="btn-gold py-3 px-8 disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2">
-                {loading ? <><Loader size={16} className="animate-spin" /> Generating your site...</> : <>Generate My Website <ArrowRight size={16} /></>}
+              <button
+                onClick={handleGenerate}
+                disabled={loading}
+                className="btn-gold py-3 px-8 disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2"
+              >
+                {loading
+                  ? <><Loader size={16} className="animate-spin" /> Generating your site...</>
+                  : <>Generate My Website <ArrowRight size={16} /></>
+                }
               </button>
             )}
           </div>

@@ -211,7 +211,7 @@ export default function PortfolioPage() {
             <div key={fp.client} className="border border-gold/20 overflow-hidden">
               {/* Top image */}
               <div className="relative h-[380px] overflow-hidden">
-                <Image src={fp.img} alt={fp.client} fill sizes="100vw" className="object-cover" />
+                <Image src={fp.img} alt={fp.client ?? fp.industry} fill sizes="100vw" className="object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/30 to-transparent" />
                 <div className="absolute bottom-8 left-8 right-8 flex items-end justify-between">
                   <div>
@@ -263,7 +263,7 @@ export default function PortfolioPage() {
                   <div>
                     <p className="section-label mb-4">Project Details</p>
                     <div className="flex flex-col gap-3">
-                      {[['Client', fp.client], ['Industry', fp.industry], ['Location', fp.location], ['Timeline', '14 days'], ['Stack', fp.stack]].map(([key, val]) => (
+                      {[['Client', fp.client ?? ''], ['Industry', fp.industry], ['Location', fp.location], ['Timeline', '14 days'], ['Stack', fp.stack]].map(([key, val]) => (
                         <div key={key} className="flex justify-between border-b border-white-subtle pb-3">
                           <span className="text-platinum-dark text-xs tracking-widest uppercase">{key}</span>
                           <span className="text-platinum-muted text-xs text-right">{val}</span>
