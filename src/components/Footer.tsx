@@ -26,11 +26,12 @@ const footerLinks = {
 export default function Footer() {
   return (
     <footer style={{ background: 'var(--bg-secondary)', borderTop: '1px solid var(--border-subtle)' }}>
+      {/* CTA Banner */}
       <div style={{ borderBottom: '1px solid var(--border-subtle)' }}>
         <div className="max-w-7xl mx-auto px-6 lg:px-12 py-16 flex flex-col lg:flex-row items-center justify-between gap-8">
           <div>
             <p className="section-label mb-3">Ready to Elevate?</p>
-            <h3 className="font-display text-4xl lg:text-5xl font-light text-platinum">
+            <h3 className="font-display text-4xl lg:text-5xl font-light text-theme-primary">
               Your Premium Digital Presence <br />
               <span className="gold-text italic">Starts Today.</span>
             </h3>
@@ -47,10 +48,10 @@ export default function Footer() {
           {/* Brand */}
           <div className="lg:col-span-2">
             <Link href="/" className="flex flex-col leading-none mb-6">
-              <span className="font-display text-3xl font-light tracking-widest text-platinum">PRIME</span>
+              <span className="font-display text-3xl font-light tracking-widest text-theme-primary">PRIME</span>
               <span className="font-display text-3xl font-light tracking-widest gold-text">PRESENCE</span>
             </Link>
-            <p className="text-platinum-muted text-sm leading-relaxed max-w-xs mb-8">
+            <p className="text-theme-muted text-sm leading-relaxed max-w-xs mb-8">
               The premium digital platform built for ambitious businesses across Africa and beyond.
               We don't build websites — we build empires.
             </p>
@@ -66,7 +67,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="w-10 h-10 border border-white-subtle flex items-center justify-center text-platinum-muted hover:text-gold hover:border-gold transition-all duration-300"
+                  className="w-10 h-10 border border-theme-subtle flex items-center justify-center text-theme-muted hover:text-gold hover:border-gold transition-all duration-300"
                 >
                   <Icon size={16} />
                 </a>
@@ -83,7 +84,7 @@ export default function Footer() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-platinum-muted hover:text-gold text-sm transition-colors duration-300"
+                      className="text-theme-muted hover:text-gold text-sm transition-colors duration-300"
                     >
                       {link.label}
                     </Link>
@@ -94,19 +95,18 @@ export default function Footer() {
           ))}
         </div>
 
-        {/* Contact Info */}
-        <div className="mt-12 pt-8 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6" style={{ borderTop: '1px solid var(--border-subtle)' }}>
+        {/* Bottom bar */}
+        <div
+          className="mt-12 pt-8 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6"
+          style={{ borderTop: '1px solid var(--border-subtle)' }}
+        >
           <div className="flex flex-col sm:flex-row gap-6">
-            {[
-              { icon: MapPin, text: 'Nairobi, Kenya · Global' },
-            ].map(({ icon: Icon, text }) => (
-              <div key={text} className="flex items-center gap-2 text-platinum-muted text-sm">
-                <Icon size={14} className="text-gold" />
-                <span>{text}</span>
-              </div>
-            ))}
+            <div className="flex items-center gap-2 text-theme-muted text-sm">
+              <MapPin size={14} className="text-gold" />
+              <span>Nairobi, Kenya · Global</span>
+            </div>
           </div>
-          <p className="text-platinum-dark text-xs tracking-widest uppercase">
+          <p className="text-theme-muted text-xs tracking-widest uppercase opacity-60">
             © {new Date().getFullYear()} Prime Presence. All rights reserved.
           </p>
         </div>

@@ -34,10 +34,10 @@ export default function ContactPage() {
       <Navbar />
       <main>
         {/* Hero */}
-        <section className="bg-obsidian pt-40 pb-20 px-6 lg:px-12">
+        <section className="bg-theme-secondary pt-40 pb-20 px-6 lg:px-12">
           <div className="max-w-7xl mx-auto">
             <p className="section-label mb-6">Get In Touch</p>
-            <h1 className="font-display text-6xl lg:text-8xl font-light text-platinum leading-none">
+            <h1 className="font-display text-6xl lg:text-8xl font-light text-theme-primary leading-none">
               Let's Build
               <br />
               <span className="gold-text italic">Something Great.</span>
@@ -46,19 +46,19 @@ export default function ContactPage() {
         </section>
 
         {/* Contact Section */}
-        <SectionWrapper className="py-20 px-6 lg:px-12">
+        <SectionWrapper className="py-20 px-6 lg:px-12 bg-theme-primary">
           <div className="max-w-7xl mx-auto grid lg:grid-cols-5 gap-16">
             {/* Left: Info */}
             <div className="lg:col-span-2">
               <p className="section-label mb-6">Start the Conversation</p>
-              <h2 className="font-display text-4xl font-light text-platinum mb-6">
+              <h2 className="font-display text-4xl font-light text-theme-primary mb-6">
                 Get In Touch —
                 <br />
                 <span className="gold-text italic">We Build It For You</span>
               </h2>
-              <p className="text-platinum-muted text-sm leading-relaxed mb-10">
-                Prime Presence is a done-for-you service. Our team designs, builds, and manages 
-                your entire digital presence. Fill in the form and we'll get back to you within 
+              <p className="text-theme-muted text-sm leading-relaxed mb-10">
+                Prime Presence is a done-for-you service. Our team designs, builds, and manages
+                your entire digital presence. Fill in the form and we'll get back to you within
                 4 business hours to discuss your project.
               </p>
 
@@ -69,21 +69,21 @@ export default function ContactPage() {
                       <Icon size={16} className="text-gold" />
                     </div>
                     <div>
-                      <p className="text-platinum-dark text-xs tracking-widest uppercase mb-1">{label}</p>
+                      <p className="text-theme-muted text-xs tracking-widest uppercase mb-1">{label}</p>
                       {href ? (
-                        <a href={href} className="text-platinum-muted text-sm hover:text-gold transition-colors">
+                        <a href={href} className="text-theme-secondary text-sm hover:text-gold transition-colors">
                           {value}
                         </a>
                       ) : (
-                        <p className="text-platinum-muted text-sm">{value}</p>
+                        <p className="text-theme-secondary text-sm">{value}</p>
                       )}
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div className="border-t border-white-subtle pt-8">
-                <p className="text-platinum-dark text-xs tracking-widest uppercase mb-4">Follow Us</p>
+              <div className="border-t border-theme-subtle pt-8">
+                <p className="text-theme-muted text-xs tracking-widest uppercase mb-4">Follow Us</p>
                 <div className="flex gap-3">
                   {[
                     { icon: Instagram, href: 'https://instagram.com/primepresence', label: 'Instagram' },
@@ -95,7 +95,7 @@ export default function ContactPage() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={label}
-                      className="w-10 h-10 border border-white-subtle flex items-center justify-center text-platinum-muted hover:text-gold hover:border-gold transition-all duration-300"
+                      className="w-10 h-10 border border-theme-subtle flex items-center justify-center text-theme-muted hover:text-gold hover:border-gold transition-all duration-300"
                     >
                       <Icon size={16} />
                     </a>
@@ -106,8 +106,8 @@ export default function ContactPage() {
 
             {/* Right: Form */}
             <div className="lg:col-span-3">
-              <div className="bg-charcoal border border-white-subtle p-10">
-                <h3 className="font-display text-3xl font-light text-platinum mb-8">
+              <div className="card-surface p-10">
+                <h3 className="font-display text-3xl font-light text-theme-primary mb-8">
                   Tell Us About Your Goals
                 </h3>
 
@@ -117,13 +117,12 @@ export default function ContactPage() {
                       <CheckCircle size={28} className="text-gold" />
                     </div>
                     <div>
-                      <h4 className="font-display text-2xl font-light text-platinum mb-3">Message Sent!</h4>
-                      <p className="text-platinum-muted text-sm leading-relaxed max-w-sm">We'll be in touch within 4 business hours.</p>
+                      <h4 className="font-display text-2xl font-light text-theme-primary mb-3">Message Sent!</h4>
+                      <p className="text-theme-muted text-sm leading-relaxed max-w-sm">We'll be in touch within 4 business hours.</p>
                     </div>
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-
                     <div className="grid sm:grid-cols-2 gap-6">
                       <div>
                         <label className="section-label block mb-2">First Name *</label>
@@ -171,9 +170,9 @@ export default function ContactPage() {
                               type="checkbox"
                               name="services"
                               value={service}
-                              className="w-4 h-4 border border-white-subtle bg-graphite accent-gold cursor-pointer"
+                              className="w-4 h-4 border border-theme-subtle bg-theme-tertiary accent-gold cursor-pointer"
                             />
-                            <span className="text-platinum-muted text-xs group-hover:text-platinum transition-colors">{service}</span>
+                            <span className="text-theme-muted text-xs group-hover:text-theme-primary transition-colors">{service}</span>
                           </label>
                         ))}
                       </div>
@@ -217,7 +216,7 @@ export default function ContactPage() {
                       )}
                     </button>
 
-                    <p className="text-platinum-dark text-xs text-center">
+                    <p className="text-theme-muted text-xs text-center opacity-70">
                       By submitting, you agree to our Privacy Policy. We'll respond within 4 business hours.
                     </p>
                   </form>
@@ -228,7 +227,7 @@ export default function ContactPage() {
         </SectionWrapper>
 
         {/* Trust Signals */}
-        <SectionWrapper className="py-16 px-6 lg:px-12 bg-charcoal border-t border-white-subtle">
+        <SectionWrapper className="py-16 px-6 lg:px-12 bg-theme-secondary border-t border-theme-subtle">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
               {[
@@ -239,7 +238,7 @@ export default function ContactPage() {
               ].map(({ value, label }) => (
                 <div key={label}>
                   <p className="font-display text-4xl font-light gold-text mb-2">{value}</p>
-                  <p className="text-platinum-muted text-xs tracking-widest uppercase">{label}</p>
+                  <p className="text-theme-muted text-xs tracking-widest uppercase">{label}</p>
                 </div>
               ))}
             </div>

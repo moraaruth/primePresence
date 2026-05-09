@@ -111,9 +111,9 @@ const testimonials = [
 ];
 
 const pricingHighlights = [
-  { plan: 'Starter', price: 'KSh 45,000', period: '', desc: 'Website + SEO — one-time build', cta: 'Enquire Now', href: '/contact', highlight: false },
-  { plan: 'Growth', price: 'KSh 95,000', period: '', desc: 'Full brand + website — one-time build', cta: 'Enquire Now', href: '/contact', highlight: true, badge: 'Most Popular' },
-  { plan: 'Elite', price: 'KSh 185,000', period: '', desc: 'Complete digital ecosystem — one-time build', cta: 'Enquire Now', href: '/contact', highlight: false },
+  { plan: 'Starter', price: 'KSh 45,000', desc: 'Website + SEO — one-time build', cta: 'Enquire Now', href: '/contact', highlight: false },
+  { plan: 'Growth', price: 'KSh 95,000', desc: 'Full brand + website — one-time build', cta: 'Enquire Now', href: '/contact', highlight: true, badge: 'Most Popular' },
+  { plan: 'Elite', price: 'KSh 185,000', desc: 'Complete digital ecosystem — one-time build', cta: 'Enquire Now', href: '/contact', highlight: false },
 ];
 
 export default function HomePage() {
@@ -121,7 +121,7 @@ export default function HomePage() {
     <>
       <Navbar />
       <main>
-        {/* ── HERO ── */}
+        {/* ── HERO — always dark for cinematic impact ── */}
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-obsidian">
           <div className="absolute inset-0 z-0">
             <Image
@@ -165,7 +165,6 @@ export default function HomePage() {
               </Link>
             </div>
 
-            {/* Trust bar */}
             <div className="flex flex-wrap items-center justify-center gap-8 animate-fade-in animate-delay-600">
               {[
                 { icon: Clock, text: 'Live in 7–14 days' },
@@ -187,13 +186,13 @@ export default function HomePage() {
         </section>
 
         {/* ── STATS ── */}
-        <SectionWrapper className="bg-charcoal border-y border-white-subtle">
+        <SectionWrapper className="bg-theme-secondary border-y border-theme-subtle">
           <div className="max-w-7xl mx-auto px-6 lg:px-12 py-16">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
               {stats.map((stat) => (
                 <div key={stat.label} className="text-center">
                   <p className="font-display text-5xl lg:text-6xl font-light gold-text mb-2">{stat.value}</p>
-                  <p className="text-platinum-muted text-sm tracking-widest uppercase">{stat.label}</p>
+                  <p className="text-theme-muted text-sm tracking-widest uppercase">{stat.label}</p>
                 </div>
               ))}
             </div>
@@ -201,153 +200,147 @@ export default function HomePage() {
         </SectionWrapper>
 
         {/* ── CHOOSE YOUR PATH ── */}
-        <SectionWrapper className="py-28 px-6 lg:px-12 bg-charcoal">
+        <SectionWrapper className="py-28 px-6 lg:px-12 bg-theme-secondary">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
               <p className="section-label mb-4">Two Ways To Build</p>
-              <h2 className="font-display text-5xl lg:text-6xl font-light text-platinum mb-4">
+              <h2 className="font-display text-5xl lg:text-6xl font-light text-theme-primary mb-4">
                 Your <span className="gold-text italic">Perfect</span> Path
               </h2>
-              <p className="text-platinum-muted max-w-xl mx-auto text-sm leading-relaxed">
+              <p className="text-theme-muted max-w-xl mx-auto text-sm leading-relaxed">
                 Whether you want to build it yourself or let us handle everything, Prime Presence has you covered.
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-8 mb-12">
               {/* DIY Path */}
-              <div className="border border-white-subtle p-12 bg-gradient-to-br from-gold/5 to-transparent rounded group hover:border-gold/40 transition-all duration-300">
+              <div
+                className="border border-theme-subtle p-12 bg-gradient-to-br from-gold/5 to-transparent rounded group hover:border-gold/40 transition-all duration-300"
+                style={{ background: 'color-mix(in srgb, var(--gold) 4%, var(--bg-tertiary))' }}
+              >
                 <div className="mb-8">
                   <div className="w-16 h-16 bg-gold/20 rounded flex items-center justify-center mb-6 group-hover:bg-gold/30 transition-colors">
                     <Cpu className="text-gold" size={32} />
                   </div>
-                  <h3 className="font-display text-3xl font-light text-platinum mb-2">Build It Yourself</h3>
-                  <p className="text-platinum-muted text-sm">Professional website in 60 seconds. No code. No design skills needed.</p>
+                  <h3 className="font-display text-3xl font-light text-theme-primary mb-2">Build It Yourself</h3>
+                  <p className="text-theme-muted text-sm">Professional website in 60 seconds. No code. No design skills needed.</p>
                 </div>
 
                 <ul className="space-y-3 mb-8">
-                  <li className="flex items-start gap-3 text-sm">
-                    <CheckCircle size={16} className="text-gold mt-0.5 shrink-0" />
-                    <span className="text-platinum-muted">AI generates your entire site</span>
-                  </li>
-                  <li className="flex items-start gap-3 text-sm">
-                    <CheckCircle size={16} className="text-gold mt-0.5 shrink-0" />
-                    <span className="text-platinum-muted">Easy drag-and-drop editor</span>
-                  </li>
-                  <li className="flex items-start gap-3 text-sm">
-                    <CheckCircle size={16} className="text-gold mt-0.5 shrink-0" />
-                    <span className="text-platinum-muted">Publish instantly to your subdomain</span>
-                  </li>
-                  <li className="flex items-start gap-3 text-sm">
-                    <CheckCircle size={16} className="text-gold mt-0.5 shrink-0" />
-                    <span className="text-platinum-muted">Free tier + affordable plans</span>
-                  </li>
+                  {[
+                    'AI generates your entire site',
+                    'Easy drag-and-drop editor',
+                    'Publish instantly to your subdomain',
+                    'Free tier + affordable plans',
+                  ].map((point) => (
+                    <li key={point} className="flex items-start gap-3 text-sm">
+                      <CheckCircle size={16} className="text-gold mt-0.5 shrink-0" />
+                      <span className="text-theme-muted">{point}</span>
+                    </li>
+                  ))}
                 </ul>
 
                 <Link href="/signup" className="btn-gold w-full justify-center">
                   Start Free <ArrowRight size={14} />
                 </Link>
-
-                <p className="text-platinum-dark text-xs text-center mt-4">No credit card required • 14-day free trial</p>
+                <p className="text-theme-muted text-xs text-center mt-4 opacity-70">No credit card required · 14-day free trial</p>
               </div>
 
               {/* Agency Path */}
-              <div className="border-2 border-gold p-12 bg-gradient-to-br from-gold/10 to-transparent rounded group hover:border-gold/60 transition-all duration-300">
+              <div
+                className="border-2 border-gold p-12 rounded group hover:border-gold/60 transition-all duration-300"
+                style={{ background: 'color-mix(in srgb, var(--gold) 6%, var(--bg-tertiary))' }}
+              >
                 <div className="mb-8">
                   <div className="w-16 h-16 bg-gold/30 rounded flex items-center justify-center mb-6 group-hover:bg-gold/40 transition-colors">
                     <Globe className="text-gold" size={32} />
                   </div>
-                  <h3 className="font-display text-3xl font-light text-platinum mb-2">Let Us Build It</h3>
-                  <p className="text-platinum-muted text-sm">Premium done-for-you service. Our team handles everything from strategy to launch.</p>
+                  <h3 className="font-display text-3xl font-light text-theme-primary mb-2">Let Us Build It</h3>
+                  <p className="text-theme-muted text-sm">Premium done-for-you service. Our team handles everything from strategy to launch.</p>
                 </div>
 
                 <ul className="space-y-3 mb-8">
-                  <li className="flex items-start gap-3 text-sm">
-                    <CheckCircle size={16} className="text-gold mt-0.5 shrink-0" />
-                    <span className="text-platinum-muted">Luxury custom design</span>
-                  </li>
-                  <li className="flex items-start gap-3 text-sm">
-                    <CheckCircle size={16} className="text-gold mt-0.5 shrink-0" />
-                    <span className="text-platinum-muted">Professional copy & branding</span>
-                  </li>
-                  <li className="flex items-start gap-3 text-sm">
-                    <CheckCircle size={16} className="text-gold mt-0.5 shrink-0" />
-                    <span className="text-platinum-muted">SEO optimization & lead capture</span>
-                  </li>
-                  <li className="flex items-start gap-3 text-sm">
-                    <CheckCircle size={16} className="text-gold mt-0.5 shrink-0" />
-                    <span className="text-platinum-muted">Ongoing support included</span>
-                  </li>
+                  {[
+                    'Luxury custom design',
+                    'Professional copy & branding',
+                    'SEO optimization & lead capture',
+                    'Ongoing support included',
+                  ].map((point) => (
+                    <li key={point} className="flex items-start gap-3 text-sm">
+                      <CheckCircle size={16} className="text-gold mt-0.5 shrink-0" />
+                      <span className="text-theme-muted">{point}</span>
+                    </li>
+                  ))}
                 </ul>
 
                 <Link href="/contact" className="btn-outline w-full justify-center">
                   Schedule Consultation <ArrowRight size={14} />
                 </Link>
-
-                <p className="text-platinum-dark text-xs text-center mt-4">From KSh 45,000 • Live in 7–14 days</p>
+                <p className="text-theme-muted text-xs text-center mt-4 opacity-70">From KSh 45,000 · Live in 7–14 days</p>
               </div>
             </div>
 
             <div className="text-center">
-              <p className="text-platinum-muted text-sm">Both paths include world-class design and results-focused strategy.</p>
+              <p className="text-theme-muted text-sm">Both paths include world-class design and results-focused strategy.</p>
             </div>
           </div>
         </SectionWrapper>
 
         {/* ── PLATFORM TEASER ── */}
-        <SectionWrapper className="py-28 px-6 lg:px-12">
+        <SectionWrapper className="py-28 px-6 lg:px-12 bg-theme-primary">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
               <p className="section-label mb-4">DIY Builder</p>
-              <h2 className="font-display text-5xl lg:text-6xl font-light text-platinum">
-              Build Your Site <span className="gold-text italic">Beautifully.</span>
+              <h2 className="font-display text-5xl lg:text-6xl font-light text-theme-primary">
+                Build Your Site <span className="gold-text italic">Beautifully.</span>
               </h2>
               <div className="divider-gold" />
-              <p className="text-platinum-muted max-w-xl mx-auto text-sm leading-relaxed">
+              <p className="text-theme-muted max-w-xl mx-auto text-sm leading-relaxed">
                 Our AI-powered builder combines luxury design with simplicity.
                 No technical skills required.
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px bg-white-subtle mb-12">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px bg-border-subtle mb-12">
               {platformFeatures.map(({ icon: Icon, title, desc }) => (
-                <div key={title} className="luxury-card bg-charcoal p-10 group">
+                <div key={title} className="luxury-card p-10 group">
                   <div className="w-12 h-12 border border-gold/30 flex items-center justify-center mb-6 group-hover:border-gold group-hover:bg-gold/5 transition-all duration-300">
                     <Icon size={20} className="text-gold" />
                   </div>
-                  <h3 className="font-display text-2xl font-light text-platinum mb-4">{title}</h3>
-                  <p className="text-platinum-muted text-sm leading-relaxed">{desc}</p>
+                  <h3 className="font-display text-2xl font-light text-theme-primary mb-4">{title}</h3>
+                  <p className="text-theme-muted text-sm leading-relaxed">{desc}</p>
                 </div>
               ))}
             </div>
 
             {/* Pricing preview */}
             <div className="grid md:grid-cols-3 gap-6 mb-10">
-              {pricingHighlights.map(({ plan, price, period, desc, cta, href, highlight, badge }) => (
+              {pricingHighlights.map(({ plan, price, desc, cta, href, highlight, badge }) => (
                 <div
                   key={plan}
                   className={`relative p-8 border transition-all duration-300 ${
                     highlight
-                      ? 'border-gold bg-graphite shadow-gold'
-                      : 'border-white-subtle bg-charcoal hover:border-gold/40'
+                      ? 'border-gold shadow-gold'
+                      : 'border-theme-subtle hover:border-gold/40'
                   }`}
+                  style={{ background: highlight ? 'color-mix(in srgb, var(--gold) 6%, var(--bg-elevated))' : 'var(--bg-elevated)' }}
                 >
                   {badge && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gold text-obsidian text-xs font-semibold tracking-widest uppercase px-4 py-1">
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gold text-text-inverse text-xs font-semibold tracking-widest uppercase px-4 py-1">
                       {badge}
                     </div>
                   )}
                   <p className="section-label mb-3">{plan}</p>
                   <div className="flex items-baseline gap-1 mb-2">
-                    <span className="font-display text-4xl font-light text-platinum">{price}</span>
-                    <span className="text-platinum-muted text-sm">{period}</span>
+                    <span className="font-display text-4xl font-light text-theme-primary">{price}</span>
                   </div>
-                  <p className="text-platinum-muted text-xs mb-6">{desc}</p>
+                  <p className="text-theme-muted text-xs mb-6">{desc}</p>
                   <Link
                     href={href}
                     className={`w-full flex items-center justify-center gap-2 py-3 text-xs font-semibold tracking-widest uppercase transition-all duration-300 ${
                       highlight
-                        ? 'bg-gold text-obsidian hover:bg-gold-light'
-                        : 'border border-gold text-gold hover:bg-gold hover:text-obsidian'
+                        ? 'bg-gold text-text-inverse hover:bg-gold-light'
+                        : 'border border-gold text-gold hover:bg-gold hover:text-text-inverse'
                     }`}
                   >
                     {cta} <ArrowRight size={12} />
@@ -365,28 +358,28 @@ export default function HomePage() {
         </SectionWrapper>
 
         {/* ── AGENCY SERVICES ── */}
-        <SectionWrapper className="py-28 px-6 lg:px-12 bg-charcoal" id="services">
+        <SectionWrapper className="py-28 px-6 lg:px-12 bg-theme-secondary" id="services">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
               <p className="section-label mb-4">Done-For-You Service</p>
-              <h2 className="font-display text-5xl lg:text-6xl font-light text-platinum">
+              <h2 className="font-display text-5xl lg:text-6xl font-light text-theme-primary">
                 We Handle <span className="gold-text italic">Everything.</span>
               </h2>
               <div className="divider-gold" />
-              <p className="text-platinum-muted max-w-xl mx-auto text-sm leading-relaxed">
+              <p className="text-theme-muted max-w-xl mx-auto text-sm leading-relaxed">
                 Prefer a dedicated team? Our agency service delivers a complete luxury digital ecosystem —
                 custom-built, fully managed, results-guaranteed.
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px bg-white-subtle">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px" style={{ background: 'var(--border-subtle)' }}>
               {agencyServices.map(({ icon: Icon, title, desc }) => (
-                <div key={title} className="luxury-card bg-charcoal p-10 group">
+                <div key={title} className="luxury-card p-10 group">
                   <div className="w-12 h-12 border border-gold/30 flex items-center justify-center mb-6 group-hover:border-gold group-hover:bg-gold/5 transition-all duration-300">
                     <Icon size={20} className="text-gold" />
                   </div>
-                  <h3 className="font-display text-2xl font-light text-platinum mb-4">{title}</h3>
-                  <p className="text-platinum-muted text-sm leading-relaxed">{desc}</p>
+                  <h3 className="font-display text-2xl font-light text-theme-primary mb-4">{title}</h3>
+                  <p className="text-theme-muted text-sm leading-relaxed">{desc}</p>
                 </div>
               ))}
             </div>
@@ -400,19 +393,19 @@ export default function HomePage() {
         </SectionWrapper>
 
         {/* ── VALUE PROPOSITION ── */}
-        <SectionWrapper className="py-28 px-6 lg:px-12">
+        <SectionWrapper className="py-28 px-6 lg:px-12 bg-theme-primary">
           <div className="max-w-7xl mx-auto">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
               <div>
                 <p className="section-label mb-6">Why Prime Presence</p>
-                <h2 className="font-display text-5xl lg:text-6xl font-light text-platinum leading-tight mb-8">
+                <h2 className="font-display text-5xl lg:text-6xl font-light text-theme-primary leading-tight mb-8">
                   Built for Africa's
                   <br />
                   <span className="gold-text italic">Most Ambitious</span>
                   <br />
                   Professionals.
                 </h2>
-                <p className="text-platinum-muted leading-relaxed mb-8">
+                <p className="text-theme-muted leading-relaxed mb-8">
                   While generic platforms build cookie-cutter websites, we architect complete digital ecosystems —
                   combining luxury design, intelligent automation, and data-driven strategy to position you
                   as the undisputed authority in your market.
@@ -426,7 +419,7 @@ export default function HomePage() {
                   ].map((point) => (
                     <li key={point} className="flex items-start gap-3">
                       <CheckCircle size={18} className="text-gold mt-0.5 shrink-0" />
-                      <span className="text-platinum-muted text-sm leading-relaxed">{point}</span>
+                      <span className="text-theme-muted text-sm leading-relaxed">{point}</span>
                     </li>
                   ))}
                 </ul>
@@ -446,12 +439,15 @@ export default function HomePage() {
                   />
                   <div className="absolute inset-0 border border-gold/20" />
                 </div>
-                <div className="absolute -bottom-6 -left-6 bg-charcoal border border-gold/30 p-6 shadow-gold">
+                <div
+                  className="absolute -bottom-6 -left-6 p-6 shadow-card border border-theme-subtle"
+                  style={{ background: 'var(--bg-elevated)' }}
+                >
                   <div className="flex items-center gap-3 mb-2">
                     <Award size={20} className="text-gold" />
-                    <span className="text-platinum text-sm font-medium">Top Rated Platform</span>
+                    <span className="text-theme-primary text-sm font-medium">Top Rated Platform</span>
                   </div>
-                  <p className="text-platinum-muted text-xs">Trusted by 500+ professionals across 15 countries</p>
+                  <p className="text-theme-muted text-xs">Trusted by 500+ professionals across 15 countries</p>
                 </div>
               </div>
             </div>
@@ -459,11 +455,11 @@ export default function HomePage() {
         </SectionWrapper>
 
         {/* ── PROCESS ── */}
-        <SectionWrapper className="py-28 px-6 lg:px-12 bg-charcoal">
+        <SectionWrapper className="py-28 px-6 lg:px-12 bg-theme-secondary">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
               <p className="section-label mb-4">How It Works</p>
-              <h2 className="font-display text-5xl lg:text-6xl font-light text-platinum">
+              <h2 className="font-display text-5xl lg:text-6xl font-light text-theme-primary">
                 From Vision to <span className="gold-text italic">Dominance</span>
               </h2>
               <div className="divider-gold" />
@@ -477,8 +473,8 @@ export default function HomePage() {
                   )}
                   <div className="relative z-10">
                     <p className="font-display text-6xl font-light text-gold/20 mb-4">{step}</p>
-                    <h3 className="font-display text-2xl font-light text-platinum mb-3">{title}</h3>
-                    <p className="text-platinum-muted text-sm leading-relaxed">{desc}</p>
+                    <h3 className="font-display text-2xl font-light text-theme-primary mb-3">{title}</h3>
+                    <p className="text-theme-muted text-sm leading-relaxed">{desc}</p>
                   </div>
                 </div>
               ))}
@@ -487,11 +483,11 @@ export default function HomePage() {
         </SectionWrapper>
 
         {/* ── TESTIMONIALS ── */}
-        <SectionWrapper className="py-28 px-6 lg:px-12">
+        <SectionWrapper className="py-28 px-6 lg:px-12 bg-theme-primary">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
               <p className="section-label mb-4">Client Results</p>
-              <h2 className="font-display text-5xl lg:text-6xl font-light text-platinum">
+              <h2 className="font-display text-5xl lg:text-6xl font-light text-theme-primary">
                 Trusted by the <span className="gold-text italic">Elite</span>
               </h2>
               <div className="divider-gold" />
@@ -499,16 +495,16 @@ export default function HomePage() {
 
             <div className="grid md:grid-cols-3 gap-8">
               {testimonials.map(({ quote, name, title, rating }) => (
-                <div key={name} className="luxury-card p-8 flex flex-col gap-6">
+                <div key={name} className="card-surface p-8 flex flex-col gap-6">
                   <div className="flex gap-1">
                     {Array.from({ length: rating }).map((_, i) => (
                       <Star key={i} size={14} className="text-gold fill-gold" />
                     ))}
                   </div>
-                  <p className="text-platinum-muted text-sm leading-relaxed italic flex-1">"{quote}"</p>
-                  <div className="border-t border-white-subtle pt-6">
-                    <p className="text-platinum font-medium text-sm">{name}</p>
-                    <p className="text-platinum-dark text-xs mt-1">{title}</p>
+                  <p className="text-theme-muted text-sm leading-relaxed italic flex-1">"{quote}"</p>
+                  <div className="border-t border-theme-subtle pt-6">
+                    <p className="text-theme-primary font-medium text-sm">{name}</p>
+                    <p className="text-theme-muted text-xs mt-1">{title}</p>
                   </div>
                 </div>
               ))}
@@ -516,9 +512,8 @@ export default function HomePage() {
           </div>
         </SectionWrapper>
 
-        {/* ── DUAL CTA ── */}
-        <SectionWrapper className="py-32 px-6 lg:px-12 relative overflow-hidden">
-          <div className="absolute inset-0 bg-hero-gradient opacity-50" />
+        {/* ── DUAL CTA — always dark for impact ── */}
+        <SectionWrapper className="py-32 px-6 lg:px-12 relative overflow-hidden bg-obsidian">
           <div className="absolute inset-0">
             <Image
               src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1920&q=80"
@@ -527,6 +522,7 @@ export default function HomePage() {
               sizes="100vw"
               className="object-cover opacity-10"
             />
+            <div className="absolute inset-0 bg-gradient-to-b from-obsidian/60 to-obsidian/90" />
           </div>
           <div className="relative z-10 max-w-5xl mx-auto text-center">
             <p className="section-label mb-6">The Next Step</p>

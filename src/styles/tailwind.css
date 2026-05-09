@@ -28,15 +28,19 @@
   --border-subtle: rgba(255, 255, 255, 0.08);
   --border-medium: rgba(255, 255, 255, 0.15);
 
-  /* Gold accent — same in both themes */
+  /* Gold accent */
   --gold:          #C9A84C;
   --gold-light:    #E2C47A;
   --gold-dark:     #A07830;
 
   /* Shadows */
-  --shadow-gold:   0 0 30px rgba(201, 168, 76, 0.15);
+  --shadow-gold:        0 0 30px rgba(201, 168, 76, 0.15);
   --shadow-gold-strong: 0 0 60px rgba(201, 168, 76, 0.25);
-  --shadow-card:   0 8px 40px rgba(0, 0, 0, 0.4);
+  --shadow-card:        0 8px 40px rgba(0, 0, 0, 0.4);
+
+  /* Hero overlays */
+  --hero-overlay:      rgba(10, 10, 10, 0.70);
+  --hero-overlay-dark: rgba(10, 10, 10, 0.45);
 
   /* Scrollbar */
   --scrollbar-track: #0A0A0A;
@@ -47,35 +51,39 @@
    DESIGN TOKENS — LIGHT
 ───────────────────────────────────────── */
 [data-theme='light'] {
-  /* Backgrounds */
-  --bg-primary:    #FAFAF8;
-  --bg-secondary:  #F2F0EB;
-  --bg-tertiary:   #E8E4DC;
+  /* Backgrounds — warm off-white, not pure white */
+  --bg-primary:    #F8F7F4;
+  --bg-secondary:  #F0EDE6;
+  --bg-tertiary:   #E6E1D8;
   --bg-elevated:   #FFFFFF;
 
-  /* Text */
-  --text-primary:  #1A1A1A;
-  --text-secondary:#4A4A4A;
-  --text-muted:    #888888;
-  --text-inverse:  #FAFAF8;
+  /* Text — WCAG AA on all bg tokens */
+  --text-primary:  #111111;
+  --text-secondary:#3D3D3D;
+  --text-muted:    #6B6B6B;
+  --text-inverse:  #F8F7F4;
 
   /* Borders */
-  --border-subtle: rgba(0, 0, 0, 0.08);
-  --border-medium: rgba(0, 0, 0, 0.15);
+  --border-subtle: rgba(0, 0, 0, 0.10);
+  --border-medium: rgba(0, 0, 0, 0.18);
 
-  /* Gold — slightly richer in light mode */
-  --gold:          #B8922A;
-  --gold-light:    #C9A84C;
-  --gold-dark:     #8B6914;
+  /* Gold — darker for 4.5:1 contrast on light bg */
+  --gold:          #9A6F1A;
+  --gold-light:    #B8892A;
+  --gold-dark:     #7A5510;
 
-  /* Shadows */
-  --shadow-gold:   0 0 30px rgba(184, 146, 42, 0.2);
-  --shadow-gold-strong: 0 0 60px rgba(184, 146, 42, 0.3);
-  --shadow-card:   0 8px 40px rgba(0, 0, 0, 0.08);
+  /* Shadows — elevation-based, not glow */
+  --shadow-gold:        0 4px 24px rgba(154, 111, 26, 0.18);
+  --shadow-gold-strong: 0 8px 48px rgba(154, 111, 26, 0.28);
+  --shadow-card:        0 2px 12px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
+
+  /* Hero overlays — warm tint, not black */
+  --hero-overlay:      rgba(248, 247, 244, 0.72);
+  --hero-overlay-dark: rgba(248, 247, 244, 0.50);
 
   /* Scrollbar */
-  --scrollbar-track: #F2F0EB;
-  --scrollbar-thumb: #B8922A;
+  --scrollbar-track: #F0EDE6;
+  --scrollbar-thumb: #9A6F1A;
 }
 
 /* ─────────────────────────────────────────
@@ -92,7 +100,6 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* Smooth theme transition — applied AFTER initial paint to prevent flash */
     &.theme-ready {
       transition: background-color 0.3s ease, color 0.3s ease;
     }
@@ -122,7 +129,7 @@
 @layer components {
   .font-display { font-family: var(--font-cormorant); }
 
-  /* Gold gradient text — adapts to theme */
+  /* Gold gradient text */
   .gold-text {
     background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%);
     -webkit-background-clip: text;
@@ -131,7 +138,7 @@
   }
 
   .shimmer-text {
-    background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 25%, #F5F0E8 50%, var(--gold-light) 75%, var(--gold) 100%);
+    background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 25%, var(--bg-elevated) 50%, var(--gold-light) 75%, var(--gold) 100%);
     background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -150,6 +157,10 @@
     box-shadow: var(--shadow-gold-strong);
     transform: translateY(-1px);
   }
+  .btn-gold:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+  }
 
   .btn-outline {
     @apply inline-flex items-center gap-2 px-8 py-4 font-body font-semibold text-sm tracking-widest uppercase transition-all duration-300;
@@ -160,6 +171,10 @@
   .btn-outline:hover {
     background: var(--gold);
     color: var(--text-inverse);
+  }
+  .btn-outline:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
   }
 
   /* Labels */
@@ -175,7 +190,7 @@
     border: 1px solid var(--border-subtle);
   }
   .luxury-card:hover {
-    border-color: rgba(201, 168, 76, 0.4);
+    border-color: color-mix(in srgb, var(--gold) 40%, transparent);
     box-shadow: var(--shadow-gold);
   }
 
@@ -191,6 +206,11 @@
     color: var(--text-secondary);
   }
   .nav-link:hover { color: var(--text-primary); }
+  .nav-link:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
 
   /* Inputs */
   .input-luxury {
@@ -200,22 +220,86 @@
     color: var(--text-primary);
   }
   .input-luxury::placeholder { color: var(--text-muted); }
-  .input-luxury:focus { border-color: var(--gold); }
+  .input-luxury:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--gold) 15%, transparent);
+  }
 
-  /* Section backgrounds using tokens */
+  /* ── Semantic background utilities ── */
   .bg-theme-primary   { background: var(--bg-primary); }
   .bg-theme-secondary { background: var(--bg-secondary); }
   .bg-theme-tertiary  { background: var(--bg-tertiary); }
   .bg-theme-elevated  { background: var(--bg-elevated); }
 
-  /* Text using tokens */
+  /* ── Semantic text utilities ── */
   .text-theme-primary   { color: var(--text-primary); }
   .text-theme-secondary { color: var(--text-secondary); }
   .text-theme-muted     { color: var(--text-muted); }
 
-  /* Border using tokens */
+  /* ── Semantic border utilities ── */
   .border-theme-subtle { border-color: var(--border-subtle); }
   .border-theme-medium { border-color: var(--border-medium); }
+
+  /* ── Dividers ── */
+  .divide-theme-subtle > * + * { border-color: var(--border-subtle); }
+
+  /* ── Card surface ── */
+  .card-surface {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-card);
+  }
+  .card-surface-secondary {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+  }
+
+  /* ── Interactive surface hover ── */
+  .surface-hover:hover { background: var(--bg-tertiary); }
+
+  /* ── Status badges — theme-aware ── */
+  .badge-success {
+    background: color-mix(in srgb, #22c55e 15%, transparent);
+    color: #15803d;
+  }
+  [data-theme='dark'] .badge-success {
+    background: rgba(34, 197, 94, 0.15);
+    color: #4ade80;
+  }
+  .badge-warning {
+    background: color-mix(in srgb, #f59e0b 15%, transparent);
+    color: #b45309;
+  }
+  [data-theme='dark'] .badge-warning {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+  }
+  .badge-error {
+    background: color-mix(in srgb, #ef4444 12%, transparent);
+    color: #b91c1c;
+  }
+  [data-theme='dark'] .badge-error {
+    background: rgba(239, 68, 68, 0.10);
+    color: #f87171;
+  }
+
+  /* ── Alert/error block ── */
+  .alert-error {
+    border-color: color-mix(in srgb, #ef4444 35%, transparent);
+    background: color-mix(in srgb, #ef4444 6%, transparent);
+    color: #b91c1c;
+  }
+  [data-theme='dark'] .alert-error {
+    border-color: rgba(239, 68, 68, 0.30);
+    background: rgba(239, 68, 68, 0.05);
+    color: #f87171;
+  }
+
+  /* ── Upgrade/promo banner ── */
+  .promo-banner {
+    border: 1px solid color-mix(in srgb, var(--gold) 30%, transparent);
+    background: color-mix(in srgb, var(--gold) 5%, var(--bg-secondary));
+  }
 }
 
 /* ─────────────────────────────────────────

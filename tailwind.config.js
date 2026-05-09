@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        /* ── Theme tokens (CSS variables) ── */
+        /* ── Semantic theme tokens (CSS variables) ── */
         'bg-primary':    'var(--bg-primary)',
         'bg-secondary':  'var(--bg-secondary)',
         'bg-tertiary':   'var(--bg-tertiary)',
@@ -19,13 +19,18 @@ module.exports = {
         'gold-light':    'var(--gold-light)',
         'gold-dark':     'var(--gold-dark)',
 
-        /* ── Static palette (for hardcoded uses) ── */
+        /* ── Static dark palette — ONLY for dark-only/hero sections ── */
         obsidian:        '#0A0A0A',
         charcoal:        '#111111',
         graphite:        '#1A1A1A',
         'graphite-light':'#222222',
-        ivory:           '#F5F0E8',
-        'ivory-dark':    '#E8E0D0',
+
+        /* ── Static light palette ── */
+        ivory:           '#F8F7F4',
+        'ivory-warm':    '#F0EDE6',
+        'ivory-dark':    '#E6E1D8',
+
+        /* ── Neutral grays (theme-agnostic) ── */
         platinum:        '#E8E8E8',
         'platinum-muted':'#9A9A9A',
         'platinum-dark': '#666666',
@@ -65,10 +70,14 @@ module.exports = {
         card:         'var(--shadow-card)',
       },
       borderColor: {
-        'gold-subtle': 'rgba(201, 168, 76, 0.2)',
-        'gold-medium': 'rgba(201, 168, 76, 0.4)',
-        'white-subtle':'var(--border-subtle)',
-        'white-medium':'var(--border-medium)',
+        'gold-subtle':  'rgba(201, 168, 76, 0.2)',
+        'gold-medium':  'rgba(201, 168, 76, 0.4)',
+        /* Semantic aliases — adapt per theme via CSS vars */
+        'theme-subtle': 'var(--border-subtle)',
+        'theme-medium': 'var(--border-medium)',
+        /* Legacy aliases kept for backward compat during migration */
+        'white-subtle': 'var(--border-subtle)',
+        'white-medium': 'var(--border-medium)',
       },
     },
   },

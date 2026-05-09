@@ -36,10 +36,7 @@ export default function Navbar() {
       <nav className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between h-20">
         {/* Logo */}
         <Link href="/" className="flex flex-col leading-none group">
-          <span
-            className="font-display text-2xl font-light tracking-widest transition-colors duration-300"
-            style={{ color: 'var(--text-primary)' }}
-          >
+          <span className="font-display text-2xl font-light tracking-widest text-theme-primary transition-colors duration-300">
             PRIME
           </span>
           <span className="font-display text-2xl font-light tracking-widest gold-text">
@@ -67,8 +64,7 @@ export default function Navbar() {
         <div className="lg:hidden flex items-center gap-3">
           <ThemeToggle />
           <button
-            style={{ color: 'var(--text-primary)' }}
-            className="hover:text-gold transition-colors"
+            className="text-theme-secondary hover:text-theme-primary transition-colors p-1"
             onClick={() => setOpen(!open)}
             aria-label="Toggle menu"
           >

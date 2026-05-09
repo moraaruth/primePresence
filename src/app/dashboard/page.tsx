@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { auth, sites as sitesApi, subscription as subApi } from '@/lib/api';
 import Link from 'next/link';
 import { Plus, Edit2, Eye, Trash2, Loader, LogOut, Settings, AlertCircle } from 'lucide-react';
-import type { Site, AuthUser, Subscription } from '@/lib/types';
+import type { Site, AuthUser } from '@/lib/types';
 
 const PLAN_LIMITS: Record<string, number> = {
   free: 1,
@@ -29,7 +29,6 @@ export default function DashboardPage() {
 
   async function loadDashboard() {
     try {
-      // Auth check
       const { data: userData, error: userErr } = await auth.me();
       if (userErr || !userData?.user) {
         router.push('/login');
@@ -37,12 +36,10 @@ export default function DashboardPage() {
       }
       setUser(userData.user);
 
-      // Load sites
       const { data: sitesData, error: sitesErr } = await sitesApi.list();
       if (sitesErr) throw new Error(sitesErr);
       setSites(sitesData?.sites || []);
 
-      // Load subscription
       const { data: subData } = await subApi.get();
       if (subData?.subscription?.plan) setPlan(subData.subscription.plan);
     } catch (err: any) {
@@ -73,10 +70,10 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg-primary)' }}>
+      <div className="min-h-screen flex items-center justify-center bg-theme-primary">
         <div className="text-center">
-          <Loader className="animate-spin mx-auto mb-4" size={32} />
-          <p className="text-platinum">Loading your dashboard...</p>
+          <Loader className="animate-spin mx-auto mb-4 text-gold" size={32} />
+          <p className="text-theme-secondary">Loading your dashboard...</p>
         </div>
       </div>
     );
@@ -86,28 +83,33 @@ export default function DashboardPage() {
   const canCreateMore = sites.length < siteLimit;
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--bg-primary)' }}>
+    <div className="min-h-screen bg-theme-primary">
       {/* Header */}
-      <div className="border-b border-white-subtle sticky top-0 z-40" style={{ background: 'var(--bg-secondary)' }}>
+      <div
+        className="border-b border-theme-subtle sticky top-0 z-40"
+        style={{ background: 'var(--bg-elevated)', backdropFilter: 'blur(12px)' }}
+      >
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="flex flex-col leading-none">
-            <span className="font-display text-xl font-light tracking-widest text-platinum">PRIME</span>
+            <span className="font-display text-xl font-light tracking-widest text-theme-primary">PRIME</span>
             <span className="font-display text-xl font-light tracking-widest gold-text">PRESENCE</span>
           </Link>
           <div className="flex items-center gap-6">
             <div className="text-right">
-              <p className="text-platinum text-sm">{user?.email}</p>
-              <p className="text-platinum-muted text-xs mt-1 uppercase tracking-wide">{plan} TIER</p>
+              <p className="text-theme-primary text-sm">{user?.email}</p>
+              <p className="text-theme-muted text-xs mt-1 uppercase tracking-wide">{plan} tier</p>
             </div>
             <button
               onClick={() => router.push('/account')}
-              className="p-2 hover:bg-white-subtle rounded transition-colors text-platinum"
+              className="p-2 rounded text-theme-secondary hover:text-theme-primary hover:bg-theme-secondary transition-colors"
+              aria-label="Account settings"
             >
               <Settings size={20} />
             </button>
             <button
               onClick={handleLogout}
-              className="p-2 hover:bg-white-subtle rounded transition-colors text-platinum"
+              className="p-2 rounded text-theme-secondary hover:text-theme-primary hover:bg-theme-secondary transition-colors"
+              aria-label="Log out"
             >
               <LogOut size={20} />
             </button>
@@ -118,14 +120,14 @@ export default function DashboardPage() {
       {/* Main */}
       <div className="max-w-7xl mx-auto px-6 py-12">
         <div className="mb-12">
-          <h1 className="font-display text-4xl font-light text-platinum mb-2">Your Websites</h1>
-          <p className="text-platinum-muted">
+          <h1 className="font-display text-4xl font-light text-theme-primary mb-2">Your Websites</h1>
+          <p className="text-theme-muted">
             {sites.length} of {siteLimit === Infinity ? '∞' : siteLimit} site{sites.length !== 1 ? 's' : ''} used
           </p>
         </div>
 
         {error && (
-          <div className="mb-6 px-4 py-3 border border-red-500/30 bg-red-500/5 text-red-400 text-sm flex items-start gap-3">
+          <div className="mb-6 px-4 py-3 border rounded text-sm flex items-start gap-3 alert-error">
             <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />
             <div>{error}</div>
           </div>
@@ -134,13 +136,12 @@ export default function DashboardPage() {
         {canCreateMore && (
           <Link
             href="/onboarding"
-            className="group mb-8 block p-8 border-2 border-dashed border-white-subtle hover:border-gold/50 transition-all rounded"
-            style={{ background: 'var(--bg-secondary)' }}
+            className="group mb-8 block p-8 border-2 border-dashed border-theme-subtle hover:border-gold/50 rounded transition-all duration-300 bg-theme-secondary"
           >
-            <div className="flex items-center gap-4 text-platinum-muted group-hover:text-platinum transition-colors">
+            <div className="flex items-center gap-4 text-theme-muted group-hover:text-theme-primary transition-colors">
               <Plus size={28} className="text-gold" />
               <div>
-                <h3 className="font-display text-lg text-platinum">Create New Website</h3>
+                <h3 className="font-display text-lg text-theme-primary">Create New Website</h3>
                 <p className="text-sm">Build a professional website in 60 seconds with AI</p>
               </div>
             </div>
@@ -152,15 +153,16 @@ export default function DashboardPage() {
             {sites.map(site => (
               <div
                 key={site.id}
-                className="group border border-white-subtle hover:border-gold/40 transition-all rounded overflow-hidden"
-                style={{ background: 'var(--bg-secondary)' }}
+                className="group border border-theme-subtle hover:border-gold/40 transition-all rounded overflow-hidden card-surface"
               >
                 {/* Thumbnail */}
-                <div className="h-40 bg-gradient-to-br from-gold/10 to-transparent flex items-center justify-center relative overflow-hidden">
-                  <div className="absolute inset-0 bg-white-subtle opacity-20" />
+                <div
+                  className="h-40 flex items-center justify-center relative overflow-hidden"
+                  style={{ background: 'color-mix(in srgb, var(--gold) 8%, var(--bg-tertiary))' }}
+                >
                   <div className="text-center relative z-10">
                     <div className="text-4xl gold-text mb-2">🌐</div>
-                    <p className="text-platinum-muted text-xs">{site.industry}</p>
+                    <p className="text-theme-muted text-xs">{site.industry}</p>
                   </div>
                 </div>
 
@@ -168,39 +170,37 @@ export default function DashboardPage() {
                 <div className="p-4">
                   <div className="flex items-start justify-between mb-3">
                     <div>
-                      <h3 className="font-display text-lg text-platinum">{site.name}</h3>
-                      <p className="text-platinum-muted text-sm">{site.subdomain}.primepresence.site</p>
+                      <h3 className="font-display text-lg text-theme-primary">{site.name}</h3>
+                      <p className="text-theme-muted text-sm">{site.subdomain}.primepresence.site</p>
                     </div>
                     <span className={`px-2 py-1 rounded text-xs font-medium uppercase tracking-wide ${
-                      site.status === 'published'
-                        ? 'bg-green-500/20 text-green-400'
-                        : 'bg-yellow-500/20 text-yellow-400'
+                      site.status === 'published' ? 'badge-success' : 'badge-warning'
                     }`}>
                       {site.status}
                     </span>
                   </div>
 
-                  <p className="text-platinum-muted text-xs mb-4">
+                  <p className="text-theme-muted text-xs mb-4">
                     Created {new Date(site.createdAt || site.created_at || '').toLocaleDateString()}
                   </p>
 
-                  <div className="flex gap-2 pt-4 border-t border-white-subtle">
+                  <div className="flex gap-2 pt-4 border-t border-theme-subtle">
                     <button
                       onClick={() => router.push(`/builder/${site.id}`)}
-                      className="flex-1 px-3 py-2 bg-gold/20 hover:bg-gold/30 text-gold transition-colors rounded text-xs font-medium flex items-center justify-center gap-2"
+                      className="flex-1 px-3 py-2 bg-gold/15 hover:bg-gold/25 text-gold transition-colors rounded text-xs font-medium flex items-center justify-center gap-2"
                     >
                       <Edit2 size={14} /> Edit
                     </button>
                     <Link
                       href={`/preview/${site.id}`}
-                      className="flex-1 px-3 py-2 bg-platinum/10 hover:bg-platinum/20 text-platinum transition-colors rounded text-xs font-medium flex items-center justify-center gap-2"
+                      className="flex-1 px-3 py-2 bg-theme-secondary hover:bg-theme-tertiary text-theme-secondary transition-colors rounded text-xs font-medium flex items-center justify-center gap-2"
                     >
                       <Eye size={14} /> Preview
                     </Link>
                     <button
                       onClick={() => handleDelete(site.id)}
                       disabled={deleting === site.id}
-                      className="px-3 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 transition-colors rounded text-xs font-medium flex items-center justify-center gap-2 disabled:opacity-50"
+                      className="px-3 py-2 badge-error hover:opacity-80 transition-opacity rounded text-xs font-medium flex items-center justify-center gap-2 disabled:opacity-50"
                     >
                       <Trash2 size={14} /> {deleting === site.id ? '...' : 'Delete'}
                     </button>
@@ -210,11 +210,11 @@ export default function DashboardPage() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-12 border border-white-subtle rounded" style={{ background: 'var(--bg-secondary)' }}>
-            <p className="text-platinum-muted mb-4">No websites yet. Create your first one!</p>
+          <div className="text-center py-12 border border-theme-subtle rounded card-surface-secondary">
+            <p className="text-theme-muted mb-4">No websites yet. Create your first one!</p>
             <Link
               href="/onboarding"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gold text-black font-medium rounded hover:bg-gold-light transition-colors"
+              className="inline-flex items-center gap-2 btn-gold"
             >
               <Plus size={18} /> Build Your First Website
             </Link>
@@ -222,10 +222,10 @@ export default function DashboardPage() {
         )}
 
         {plan === 'free' && (
-          <div className="mt-12 p-6 border border-gold/30 rounded" style={{ background: 'linear-gradient(135deg, rgba(201,168,76,0.05), transparent)' }}>
-            <h3 className="font-display text-lg text-platinum mb-2">Unlock More Websites</h3>
-            <p className="text-platinum-muted text-sm mb-4">Upgrade to Starter for 3 sites, or Pro for unlimited.</p>
-            <Link href="/pricing" className="inline-flex items-center gap-2 px-4 py-2 bg-gold text-black font-medium rounded hover:bg-gold-light transition-colors text-sm">
+          <div className="mt-12 p-6 rounded promo-banner">
+            <h3 className="font-display text-lg text-theme-primary mb-2">Unlock More Websites</h3>
+            <p className="text-theme-muted text-sm mb-4">Upgrade to Starter for 3 sites, or Pro for unlimited.</p>
+            <Link href="/pricing" className="btn-gold text-sm px-6 py-3">
               View Plans
             </Link>
           </div>
